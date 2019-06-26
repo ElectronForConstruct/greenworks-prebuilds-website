@@ -13,6 +13,24 @@
             </v-flex>
         </v-layout>
         <v-layout row wrap>
+            <v-flex xs4>
+                <v-checkbox
+                        v-model="onlyElectron"
+                        label="Electron"></v-checkbox>
+            </v-flex>
+            <v-flex xs4>
+                <v-checkbox
+                        v-model="onlyNodeWebkit"
+                        label="NW.js"></v-checkbox>
+            </v-flex>
+            <v-flex xs4>
+                <v-checkbox
+                        v-model="onlyNode"
+                        label="Node"></v-checkbox>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap>
             <v-flex xs6 md4 lg3 v-for="asset in selectedReleaseAssets" :key="asset.id">
                 <v-checkbox
                         v-model="selectedFiles"
@@ -44,13 +62,32 @@ export default {
     },
     selectedReleaseAssets() {
       if (this.selectedRelease) {
-        return this.selectedRelease.assets;
+        return this.selectedRelease.assets.filter((asset) => {
+          if (!this.onlyNode && !this.onlyNodeWebkit && !this.onlyElectron) {
+            return true;
+          }
+
+          if (this.onlyElectron && asset.name.includes('electron')) {
+            return true;
+          }
+          if (this.onlyNodeWebkit && asset.name.includes('node-webkit')) {
+            return true;
+          }
+          if (this.onlyNode && asset.name.includes('node') && !asset.name.includes('webkit') && !asset.name.includes('electron')) {
+            return true;
+          }
+          return false;
+        });
       }
       return [];
     },
   },
   data() {
     return {
+      onlyElectron: false,
+      onlyNodeWebkit: false,
+      onlyNode: false,
+
       state: 'Download',
 
       selectedReleaseTag: '',
@@ -70,7 +107,7 @@ export default {
     const rep = await ky
       .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases')
       .json();
-    // console.log(rep);
+      // console.log(rep);
     this.releases = rep;
     this.selectedReleaseTag = this.releases[0].tag_name;
   },
