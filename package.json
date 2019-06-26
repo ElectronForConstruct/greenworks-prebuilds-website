@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve-fct": "netlify-lambda serve src_functions",
     "build": "vue-cli-service build",
     "build-fct": "netlify-lambda build src_functions",
     "lint": "vue-cli-service lint"

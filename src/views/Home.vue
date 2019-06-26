@@ -9,7 +9,7 @@
                 ></v-select>
             </v-flex>
             <v-flex xs3>
-                <v-btn @click="dl">{{ state }}</v-btn>
+                <v-btn :disabled="selectedFiles.length === 0" @click="dl">{{ state }}</v-btn>
             </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -61,7 +61,7 @@ export default {
   methods: {
     async dl() {
       this.state = 'Generating zip file';
-      saveAs(`https://greenworks-prebuilds.armaldio.xyz/.netlify/functions/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
+      saveAs(`/.netlify/functions/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
       // saveAs(`http://localhost:9000/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
       this.state = 'Download';
     },
@@ -70,7 +70,7 @@ export default {
     const rep = await ky
       .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases')
       .json();
-    console.log(rep);
+    // console.log(rep);
     this.releases = rep;
     this.selectedReleaseTag = this.releases[0].tag_name;
   },
