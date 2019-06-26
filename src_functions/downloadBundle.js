@@ -36,6 +36,7 @@ exports.handler = async function (event, context, callback) {
       compression: 'DEFLATE',
     })
     .then((zipFile) => {
+      console.log('No errors');
       callback(null, {
         headers: {
           'Content-Type': 'application/zip, application/octet-stream',
@@ -49,6 +50,7 @@ exports.handler = async function (event, context, callback) {
         statusCode: 200,
       });
     }, (error) => {
+      console.log('Error', error);
       callback(error);
     });
 };
