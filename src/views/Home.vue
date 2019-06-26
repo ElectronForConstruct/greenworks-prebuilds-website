@@ -61,7 +61,8 @@ export default {
   methods: {
     async dl() {
       this.state = 'Generating zip file';
-      saveAs(`http://localhost:9000/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
+      saveAs(`/.netlify/functions/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
+      // saveAs(`http://localhost:9000/downloadBundle?ids=${this.selectedFiles.join(',')}`, 'greenworks-binaries.zip');
       this.state = 'Download';
     },
   },
