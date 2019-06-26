@@ -1,5 +1,14 @@
-# greenworks-prebuilds-website
+# Greenworks Prebuilds Website
 
+# Usage
+1. Pick a release
+2. Select the assets you want
+3. Hit download
+4. Wait for it to be generated and downloaded
+
+Files based on [greenworks-prebuilds](https://github.com/ElectronForConstruct/greenworks-prebuilds)
+
+# Contribution
 ## Project setup
 ```
 yarn install
@@ -24,6 +33,3 @@ yarn run test
 ```
 yarn run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
