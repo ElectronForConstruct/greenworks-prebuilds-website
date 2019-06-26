@@ -36,7 +36,7 @@ exports.handler = async function (event) {
 
       console.log(`File ${i}`);
 
-      zip.file(`${infos.body.name}.node`, stream);
+      zip.file(infos.body.name, stream);
     } catch (e) {
       console.error('error', e);
       return {
@@ -51,13 +51,11 @@ exports.handler = async function (event) {
     compression: 'DEFLATE',
   });
 
-  console.log(body);
-
   try {
     return {
       headers: {
         'Content-Type': 'application/zip, application/octet-stream',
-        'Content-disposition': 'attachment; filename=greenworks-binaries.zip',
+        'Content-disposition': 'attachment; filename=greenworks-prebuilds.zip',
 
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
