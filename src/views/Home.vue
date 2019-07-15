@@ -150,6 +150,7 @@
 <script>
 import { saveAs } from 'file-saver';
 import ky from 'ky';
+import abis from 'modules-abi';
 
 const sleep = m => new Promise(r => setTimeout(r, m));
 
@@ -159,9 +160,11 @@ const mapped = async (asset) => {
   try {
     const rt = arr[2].replace('node-webkit', 'nw.js');
     const abi = parseInt(arr[3].replace('v', ''), 10);
-    range = await ky.get(`https://modules-abi.armaldio.now.sh/api?mode=range&runtime=${rt}&abi=${abi}`).json();
+    range = await abis.getRange(rt, abi);
+    console.log('range', range);
+    // range = await ky.get(`https://modules-abi.armaldio.now.sh/api?mode=range&runtime=${rt}&abi=${abi}`).json();
   } catch (e) {
-    console.log('unable to fetch');
+    console.log('unable to fetch', e);
   }
   return Object.assign({}, asset, {
     runtime: arr[2],
