@@ -36,26 +36,26 @@
 </template>
 
 <script>
-  // import install from './registerServiceWorker';
+// import install from './registerServiceWorker';
 
-  export default {
-    name: 'App',
-    data() {
-      return {
-        snackbar    : false,
-        snackbarText: '',
+export default {
+  name: 'App',
+  data() {
+    return {
+      snackbar: false,
+      snackbarText: '',
 
-        releases          : [],
-        selectedReleaseTag: null,
-      };
-    },
-    async mounted() {
-      /*install((text) => {
+      releases: [],
+      selectedReleaseTag: null,
+    };
+  },
+  async mounted() {
+    /* install((text) => {
         this.snackbar = true;
         this.snackbarText = text;
-      });*/
-    },
-  };
+      }); */
+  },
+};
 </script>
 
 <style>

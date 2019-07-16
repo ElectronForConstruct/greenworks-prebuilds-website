@@ -32,53 +32,53 @@
         </v-list-tile>
 
         <v-subheader>OS</v-subheader>
-        <v-list-tile @click="() => {}" v-for="os in oses" :key="os.name">
+        <v-list-tile @click="() => {}" v-for="o in os" :key="o.name">
           <v-list-tile-action>
-            <v-checkbox v-model="os.value"></v-checkbox>
+            <v-checkbox v-model="o.value"></v-checkbox>
           </v-list-tile-action>
 
-          <v-list-tile-content @click="os.value = !os.value">
+          <v-list-tile-content @click="o.value = !o.value">
             <v-list-tile-title>
-              {{ os.name }}
+              {{ o.name }}
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
         <v-subheader>Arch</v-subheader>
-        <v-list-tile @click="() => {}" v-for="arch in arches" :key="arch.name">
+        <v-list-tile @click="() => {}" v-for="a in arch" :key="a.name">
           <v-list-tile-action>
-            <v-checkbox v-model="arch.value"></v-checkbox>
+            <v-checkbox v-model="a.value"></v-checkbox>
           </v-list-tile-action>
 
-          <v-list-tile-content @click="arch.value = !arch.value">
+          <v-list-tile-content @click="a.value = !a.value">
             <v-list-tile-title>
-              {{ arch.name }}
+              {{ a.name }}
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
         <v-subheader>Runtime</v-subheader>
-        <v-list-tile @click="() => {}" v-for="runtime in runtimes" :key="runtime.name">
+        <v-list-tile @click="() => {}" v-for="r in runtime" :key="r.name">
           <v-list-tile-action>
-            <v-checkbox v-model="runtime.value"></v-checkbox>
+            <v-checkbox v-model="r.value"></v-checkbox>
           </v-list-tile-action>
 
-          <v-list-tile-content @click="runtime.value = !runtime.value">
+          <v-list-tile-content @click="r.value = !r.value">
             <v-list-tile-title>
-              {{ runtime.name }}
+              {{ r.name }}
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
         <v-subheader>Versions</v-subheader>
-        <v-list-tile @click="() => {}" v-for="version in versions" :key="version.name">
+        <v-list-tile @click="() => {}" v-for="v in version" :key="v.name">
           <v-list-tile-action>
-            <v-checkbox v-model="version.value"></v-checkbox>
+            <v-checkbox v-model="v.value"></v-checkbox>
           </v-list-tile-action>
 
-          <v-list-tile-content @click="version.value = !version.value">
+          <v-list-tile-content @click="v.value = !v.value">
             <v-list-tile-title>
-              {{ version.name }}
+              {{ v.name }}
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -156,7 +156,7 @@ import versionLine from '../components/VersionLine.vue';
 
 const sleep = m => new Promise(r => setTimeout(r, m));
 
-const mapped = async (asset) => {
+const mapped = (asset) => {
   const arr = asset.name.split(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/);
   return Object.assign({}, asset, {
     runtime: arr[2],
@@ -174,14 +174,72 @@ export default {
       return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
     },
   },
-  asyncComputed: {
-    async filteredReleaseAssets() {
+  watch: {
+    os: {
+      handler(newValue) {
+        const oses = newValue.map(x => (x.value ? x.id : null))
+          .filter(x => !!x)
+          .join(',');
+        console.log(oses);
+
+        this.$router.push({
+          name: this.$router.fullPath,
+          query: Object.assign({}, this.$route.query, { os: oses }),
+        });
+      },
+      deep: true,
+    },
+    arch: {
+      handler(newValue) {
+        console.log(this.$route.query);
+        const arches = newValue.map(x => (x.value ? x.id : null))
+          .filter(x => !!x)
+          .join(',');
+
+        this.$router.push({
+          name: this.$router.fullPath,
+          query: Object.assign({}, this.$route.query, { arch: arches }),
+        });
+      },
+      deep: true,
+    },
+    runtime: {
+      handler(newValue) {
+        console.log(this.$route.query);
+        const runtimes = newValue.map(x => (x.value ? x.id : null))
+          .filter(x => !!x)
+          .join(',');
+
+        this.$router.push({
+          name: this.$router.fullPath,
+          query: Object.assign({}, this.$route.query, { runtime: runtimes }),
+        });
+      },
+      deep: true,
+    },
+    version: {
+      handler(newValue) {
+        console.log(this.$route.query);
+        const versions = newValue.map(x => (x.value ? x.name : null))
+          .filter(x => !!x)
+          .join(',');
+
+        this.$router.push({
+          name: this.$router.fullPath,
+          query: Object.assign({}, this.$route.query, { version: versions }),
+        });
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    filteredReleaseAssets() {
       if (this.selectedRelease) {
         const assets = [];
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
           const asset = this.selectedRelease.assets[i];
           // eslint-disable-next-line
-            assets.push(await mapped(asset));
+            assets.push(mapped(asset));
         }
         return assets
           .filter(this.filterOs)
@@ -191,8 +249,6 @@ export default {
       }
       return [];
     },
-  },
-  computed: {
     selectedRelease() {
       return this.releases.find(r => r === this.selectedReleaseTag);
     },
@@ -204,7 +260,7 @@ export default {
     return {
       search: '',
       loadingDialog: false,
-      oses: [
+      os: [
         {
           name: 'Mac',
           id: 'darwin',
@@ -221,7 +277,7 @@ export default {
           value: true,
         },
       ],
-      arches: [
+      arch: [
         {
           name: '64 bits',
           id: 'x64',
@@ -233,7 +289,7 @@ export default {
           value: true,
         },
       ],
-      runtimes: [
+      runtime: [
         {
           name: 'Electron',
           id: 'electron',
@@ -250,7 +306,7 @@ export default {
           value: true,
         },
       ],
-      versions: [
+      version: [
         {
           name: '57',
           value: true,
@@ -283,52 +339,36 @@ export default {
 
       selectedReleaseTag: null,
       releases: [],
-
-      headers: [
-        {
-          text: 'Runtime',
-          value: 'runtime',
-          align: 'center',
-        },
-        {
-          text: 'Abi',
-          value: 'abi',
-          align: 'center',
-        },
-        {
-          text: 'OS',
-          value: 'os',
-          align: 'center',
-        },
-        {
-          text: 'Architecture',
-          value: 'arch',
-          align: 'center',
-        },
-        {
-          text: 'Versions',
-          value: 'versions',
-          align: 'center',
-        },
-      ],
     };
   },
   methods: {
     filterOs(asset) {
-      return !!this.oses.find(os => os.id === asset.os && os.value === true);
+      if (this.$route.query.os && this.$route.query.os.length > 0) {
+        const osFilter = this.$route.query.os.split(',');
+        return osFilter.includes(asset.os);
+      }
+      return true;
     },
     filterArch(asset) {
-      return !!this.arches.find(arch => arch.id === asset.arch && arch.value === true);
+      if (this.$route.query.arch && this.$route.query.arch.length > 0) {
+        const archFilter = this.$route.query.arch.split(',');
+        return archFilter.includes(asset.arch);
+      }
+      return true;
     },
     filterRuntime(asset) {
-      return !!this.runtimes.find(
-        runtime => runtime.id === asset.runtime && runtime.value === true,
-      );
+      if (this.$route.query.runtime && this.$route.query.runtime.length > 0) {
+        const runtimeFilter = this.$route.query.runtime.split(',');
+        return runtimeFilter.includes(asset.runtime);
+      }
+      return true;
     },
     filterVersion(asset) {
-      return !!this.versions.find(
-        version => version.name === asset.abi.replace('v', '') && version.value === true,
-      );
+      if (this.$route.query.version && this.$route.query.version.length > 0) {
+        const versionFilter = this.$route.query.version.split(',');
+        return versionFilter.includes(asset.abi.replace('v', ''));
+      }
+      return true;
     },
     async dl() {
       this.loadingDialog = true;
@@ -353,6 +393,17 @@ export default {
 
     this.releases = rep.filter(r => semver.gte(r.tag_name, '0.2.6'));
     this.selectedReleaseTag = this.releases[0];
+
+    const filters = ['os', 'arch', 'runtime', 'version'];
+    filters.forEach((filter) => {
+      if (this.$route.query[filter] && this.$route.query[filter].length > 0) {
+        const URLFilters = this.$route.query[filter].split(',');
+        this[filter].forEach((el) => {
+          // eslint-disable-next-line
+            el.value = URLFilters.includes(el.id ? el.id : el.name);
+        });
+      }
+    });
   },
 };
 </script>

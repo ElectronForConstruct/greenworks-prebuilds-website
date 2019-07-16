@@ -20,7 +20,7 @@
         </v-chip>
         <v-chip
           label
-          color="yellow">{{infos.arch}}
+          color="grey">{{infos.arch}}
         </v-chip>
       </div>
     </v-list-tile-content>
@@ -67,7 +67,7 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.infos);
+    // console.log(this.infos);
 
     const rt = this.infos.runtime.replace('node-webkit', 'nw.js');
     const abi = parseInt(this.infos.abi.replace('v', ''), 10);
