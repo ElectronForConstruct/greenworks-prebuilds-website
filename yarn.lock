@@ -6096,12 +6096,11 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
-modules-abi@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/modules-abi/-/modules-abi-0.1.7.tgz#f400fef1565ddb89fa462b82c1d9338226b11e34"
-  integrity sha512-+nfA3NKKf4y/vBL25PmxSGYGPegRwb8xnHFwsVvYQafj2+ar4GnOEAxUAWwJxBP5iG8JOilFWRt+D2k8Z/MpVA==
+modules-abi@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/modules-abi/-/modules-abi-0.2.0.tgz#2067aefbb7699138bd60058cbf9414364d7df838"
+  integrity sha512-mWCCLLz8T5mw9pcP9GYsEE4BW7/LfqqjBKr+J9HsaZOh0VUiSEzeUgZOiZf3H/4bD6GZDDbGXCRKj6m6R5C/AA==
   dependencies:
-    node-fetch "^2.6.0"
     semver "^6.2.0"
 
 move-concurrently@^1.0.1:
@@ -6235,11 +6234,6 @@ no-case@^2.2.0:
   integrity sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==
   dependencies:
     lower-case "^1.1.1"
-
-node-fetch@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
 node-forge@0.7.5:
   version "0.7.5"
@@ -9089,6 +9083,11 @@ vue-eslint-parser@^5.0.0:
     espree "^4.1.0"
     esquery "^1.0.1"
     lodash "^4.17.11"
+
+vue-fragment@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/vue-fragment/-/vue-fragment-1.5.1.tgz#44c070d55ed1e9a6c698ef57a5c83f64bb06feeb"
+  integrity sha512-ig6eES6TcMBbANW71ylB+AJgRN+Zksb3f50AxjGpAk6hMzqmeuD80qeh4LJP0jVw2dMBMjgRUfIkrvxygoRgtQ==
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"

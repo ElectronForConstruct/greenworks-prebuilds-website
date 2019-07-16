@@ -97,38 +97,39 @@
 
     <v-layout row wrap>
       <v-flex xs12 class="pb-2">
-        <v-text-field
+        <!--<v-text-field
           v-model="search"
           append-icon="fas fa-search"
           label="Search"
           single-line
           hide-details
-        ></v-text-field>
+        ></v-text-field>-->
       </v-flex>
       <v-flex xs12>
-        <v-data-table v-model="selectedFiles"
-                      :headers="headers"
-                      :items="filteredReleaseAssets"
-                      v-if="filteredReleaseAssets"
-                      item-key="name"
-                      select-all
-                      sort-icon="fas fa-chevron-circle-down"
-                      :search="search"
-                      :rows-per-page-items="[
-                              {'text':'$vuetify.dataIterator.rowsPerPageAll','value':-1}
-                          ]"
-                      class="elevation-1">
-          <template v-slot:items="props">
-            <td>
-              <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
-            </td>
-            <td class="text-xs-center">{{ props.item.runtime }}</td>
-            <td class="text-xs-center">{{ props.item.abi }}</td>
-            <td class="text-xs-center">{{ props.item.os }}</td>
-            <td class="text-xs-center">{{ props.item.arch }}</td>
-            <td class="text-xs-center">{{ props.item.versions ? props.item.versions : '' }}</td>
-          </template>
-        </v-data-table>
+        <v-list v-if="selectedFiles.length > 0">
+          <transition-group name="slide-x-transition">
+            <version-line
+              v-for="asset in selectedFiles"
+              :key="asset.id"
+              :infos="asset"></version-line>
+          </transition-group>
+        </v-list>
+        <hr v-if="selectedFiles.length > 0">
+        <v-list :items="filteredReleaseAssets"
+                v-if="filteredReleaseAssets">
+          <v-progress-circular
+            class="centered-progress"
+            v-if="filteredReleaseAssets.length === 0"
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+          <transition-group name="slide-x-transition">
+            <version-line
+              v-for="asset in filteredReleaseAssets"
+              :key="asset.id"
+              :infos="asset"></version-line>
+          </transition-group>
+        </v-list>
       </v-flex>
 
       <v-dialog v-model="loadingDialog" width="500" persistent>
@@ -150,34 +151,24 @@
 <script>
 import { saveAs } from 'file-saver';
 import ky from 'ky';
-import abis from 'modules-abi';
+import semver from 'semver';
+import versionLine from '../components/VersionLine.vue';
 
 const sleep = m => new Promise(r => setTimeout(r, m));
 
 const mapped = async (asset) => {
   const arr = asset.name.split(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/);
-  let range = null;
-  try {
-    const rt = arr[2].replace('node-webkit', 'nw.js');
-    const abi = parseInt(arr[3].replace('v', ''), 10);
-    range = await abis.getRange(rt, abi);
-    console.log('range', range);
-    // range = await ky.get(`https://modules-abi.armaldio.now.sh/api?mode=range&runtime=${rt}&abi=${abi}`).json();
-  } catch (e) {
-    console.log('unable to fetch', e);
-  }
   return Object.assign({}, asset, {
     runtime: arr[2],
     abi: arr[3],
     os: arr[4],
     arch: arr[5],
-    // eslint-disable-next-line
-    versions: range ? (range.length === 2 ? `From ${range[0]} to ${range[1]}` : range.join(', ')) : range,
   });
 };
 
 export default {
   name: 'home',
+  components: { versionLine },
   filters: {
     formatName(value) {
       return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
@@ -204,6 +195,9 @@ export default {
   computed: {
     selectedRelease() {
       return this.releases.find(r => r === this.selectedReleaseTag);
+    },
+    selectedFiles() {
+      return this.$store.state.selected;
     },
   },
   data() {
@@ -289,7 +283,6 @@ export default {
 
       selectedReleaseTag: null,
       releases: [],
-      selectedFiles: [],
 
       headers: [
         {
@@ -357,9 +350,9 @@ export default {
     const rep = await ky
       .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases')
       .json();
-    this.releases = rep;
-    // eslint-disable-next-line
-      this.selectedReleaseTag = this.releases[ 0 ];
+
+    this.releases = rep.filter(r => semver.gte(r.tag_name, '0.2.6'));
+    this.selectedReleaseTag = this.releases[0];
   },
 };
 </script>
@@ -378,6 +371,11 @@ export default {
       vertical-align: middle;
       margin-right: 10px;
     }
+  }
+
+  .centered-progress {
+    width: 100%;
+    margin: 20px;
   }
 
 </style>
