@@ -26,7 +26,7 @@
     "vue-async-computed": "^3.7.0",
     "vue-fragment": "^1.5.1",
     "vue-router": "^3.0.3",
-    "vuetify": "^1.5.16",
+    "vuetify": "^2.0.7",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -38,6 +38,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vuetify": "^1.0.0-beta.3",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "stylus": "^0.54.5",

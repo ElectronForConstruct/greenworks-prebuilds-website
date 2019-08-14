@@ -7,6 +7,9 @@ module.exports = {
     'plugin:vue/essential',
     '@vue/airbnb',
   ],
+  plugins      : [
+    'vuetify',
+  ],
   rules        : {
     'no-console'                     : process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger'                    : process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -14,6 +17,9 @@ module.exports = {
       'array' : false,
       'object': true,
     }],
+    'vuetify/no-deprecated-classes'  : 'error',
+    'vuetify/grid-unknown-attributes': 'error',
+    'vuetify/no-legacy-grid'         : 'error',
     // 'vue/return-in-computed-property': 0,
   },
   parserOptions: {

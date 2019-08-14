@@ -1,38 +1,42 @@
 <template>
-  <v-list-tile @click="toggleSelection">
-    <v-list-tile-action>
+  <v-list-item @click="toggleSelection">
+    <v-list-item-action>
       <v-checkbox :input-value="isSelected" primary>
       </v-checkbox>
-    </v-list-tile-action>
-    <v-list-tile-content>
+    </v-list-item-action>
+    <v-list-item-content>
       <div>
         <v-chip
+          class="ma-1"
           label
           color="red">{{infos.runtime}}
         </v-chip>
         <v-chip
+          class="ma-1"
           label
           color="green">{{infos.abi}}
         </v-chip>
         <v-chip
+          class="ma-1"
           label
           color="purple">{{infos.os}}
         </v-chip>
         <v-chip
+          class="ma-1"
           label
           color="grey">{{infos.arch}}
         </v-chip>
       </div>
-    </v-list-tile-content>
+    </v-list-item-content>
 
-    <v-list-tile-action>
+    <v-list-item-action v-if="range.length === 2">
       <v-chip label color="blue">
         {{ range[0] ? range[0] : '' }}
         <v-icon small class="px-2">fas fa-arrow-right</v-icon>
         {{ range[1] ? range[1] : '' }}
       </v-chip>
-    </v-list-tile-action>
-  </v-list-tile>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 
 <script>
@@ -69,9 +73,14 @@ export default {
   async mounted() {
     // console.log(this.infos);
 
-    const rt = this.infos.runtime.replace('node-webkit', 'nw.js');
+    const rt = this.infos.runtime.replace('node-webkit', 'nw.js'); // legacy
     const abi = parseInt(this.infos.abi.replace('v', ''), 10);
-    this.range = await abis.getRange(rt, abi);
+
+    try {
+      this.range = await abis.getRange(abi, rt);
+    } catch (e) {
+      console.error('Unable to get range', e);
+    }
   },
 };
 </script>

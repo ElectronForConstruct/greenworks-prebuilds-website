@@ -8,80 +8,80 @@
                        mandatory
                        class="full-width"
                        v-if="releases.length > 0">
-          <v-list-tile @click="() => {}"
+          <v-list-item @click="() => {}"
                        v-for="release in releases"
                        :key="release.tag_name">
-            <v-list-tile-action>
+            <v-list-item-action>
               <v-radio :value="release"></v-radio>
-            </v-list-tile-action>
+            </v-list-item-action>
 
-            <v-list-tile-content @click="selectedReleaseTag = release">
-              <v-list-tile-title>
+            <v-list-item-content @click="selectedReleaseTag = release">
+              <v-list-item-title>
                 {{ release.tag_name }}
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-radio-group>
-        <v-list-tile @click="() => {}"
+        <v-list-item @click="() => {}"
                      v-else>
-          <v-list-tile-content>
-            <v-list-tile-title>
+          <v-list-item-content>
+            <v-list-item-title>
               Loading releases...
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-subheader>OS</v-subheader>
-        <v-list-tile @click="() => {}" v-for="o in os" :key="o.name">
-          <v-list-tile-action>
+        <v-list-item @click="() => {}" v-for="o in os" :key="o.name">
+          <v-list-item-action>
             <v-checkbox v-model="o.value"></v-checkbox>
-          </v-list-tile-action>
+          </v-list-item-action>
 
-          <v-list-tile-content @click="o.value = !o.value">
-            <v-list-tile-title>
+          <v-list-item-content @click="o.value = !o.value">
+            <v-list-item-title>
               {{ o.name }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-subheader>Arch</v-subheader>
-        <v-list-tile @click="() => {}" v-for="a in arch" :key="a.name">
-          <v-list-tile-action>
+        <v-list-item @click="() => {}" v-for="a in arch" :key="a.name">
+          <v-list-item-action>
             <v-checkbox v-model="a.value"></v-checkbox>
-          </v-list-tile-action>
+          </v-list-item-action>
 
-          <v-list-tile-content @click="a.value = !a.value">
-            <v-list-tile-title>
+          <v-list-item-content @click="a.value = !a.value">
+            <v-list-item-title>
               {{ a.name }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-subheader>Runtime</v-subheader>
-        <v-list-tile @click="() => {}" v-for="r in runtime" :key="r.name">
-          <v-list-tile-action>
+        <v-list-item @click="() => {}" v-for="r in runtime" :key="r.name">
+          <v-list-item-action>
             <v-checkbox v-model="r.value"></v-checkbox>
-          </v-list-tile-action>
+          </v-list-item-action>
 
-          <v-list-tile-content @click="r.value = !r.value">
-            <v-list-tile-title>
+          <v-list-item-content @click="r.value = !r.value">
+            <v-list-item-title>
               {{ r.name }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-subheader>Versions</v-subheader>
-        <v-list-tile @click="() => {}" v-for="v in version" :key="v.name">
-          <v-list-tile-action>
+        <v-list-item @click="() => {}" v-for="v in version" :key="v.name">
+          <v-list-item-action>
             <v-checkbox v-model="v.value"></v-checkbox>
-          </v-list-tile-action>
+          </v-list-item-action>
 
-          <v-list-tile-content @click="v.value = !v.value">
-            <v-list-tile-title>
+          <v-list-item-content @click="v.value = !v.value">
+            <v-list-item-title>
               {{ v.name }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -95,8 +95,8 @@
       <v-icon>fas fa-download</v-icon>
     </v-btn>
 
-    <v-layout row wrap>
-      <v-flex xs12 class="pb-2">
+    <v-row>
+      <v-col cols="12" class="pb-2">
         <!--<v-text-field
           v-model="search"
           append-icon="fas fa-search"
@@ -104,8 +104,8 @@
           single-line
           hide-details
         ></v-text-field>-->
-      </v-flex>
-      <v-flex xs12>
+      </v-col>
+      <v-col cols="12">
         <v-list v-if="selectedFiles.length > 0">
           <transition-group name="slide-x-transition">
             <version-line
@@ -130,7 +130,7 @@
               :infos="asset"></version-line>
           </transition-group>
         </v-list>
-      </v-flex>
+      </v-col>
 
       <v-dialog v-model="loadingDialog" width="500" persistent>
         <v-card>
@@ -144,7 +144,7 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-    </v-layout>
+    </v-row>
   </div>
 </template>
 
@@ -245,7 +245,8 @@ export default {
           .filter(this.filterOs)
           .filter(this.filterArch)
           .filter(this.filterRuntime)
-          .filter(this.filterVersion);
+          .filter(this.filterVersion)
+          .reverse();
       }
       return [];
     },
@@ -297,7 +298,7 @@ export default {
         },
         {
           name: 'NW.js',
-          id: 'node-webkit',
+          id: 'nw.js',
           value: true,
         },
         {
