@@ -1,18 +1,19 @@
 <template>
   <v-app dark>
     <v-toolbar app fixed clipped-left persistant>
-      <v-toolbar-title class="headline text-uppercase">
+      <v-toolbar-title class="headline text-uppercase d-flex align-center">
+        <v-img class="mr-3" width="45" :src="icons.homeIcon"></v-img>
         <span>Greenworks Prebuild Downloader</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!--
-          <v-btn flat
-                 href="https://github.com/vuetifyjs/vuetify/releases/latest"
-                 target="_blank">
-              <span class="mr-2">Latest Release</span>
-              <v-icon>fas fa-external-link-alt</v-icon>
-          </v-btn>
-      -->
+      <v-btn>
+        <v-img width="25" flat class="mr-3" :src="icons.donationIcon"></v-img>
+        Donations
+      </v-btn>
+      <v-btn>
+        <v-img width="25" flat class="mr-3" :src="icons.githubIcon"></v-img>
+        Github
+      </v-btn>
     </v-toolbar>
 
     <v-content>
@@ -37,6 +38,9 @@
 
 <script>
 // import install from './registerServiceWorker';
+import homeIcon from './assets/home.png';
+import donationIcon from './assets/donation.png';
+import githubIcon from './assets/github.png';
 
 export default {
   name: 'App',
@@ -47,13 +51,18 @@ export default {
 
       releases: [],
       selectedReleaseTag: null,
+      icons: {
+        homeIcon,
+        donationIcon,
+        githubIcon,
+      },
     };
   },
   async mounted() {
     /* install((text) => {
-        this.snackbar = true;
-        this.snackbarText = text;
-      }); */
+                this.snackbar = true;
+                this.snackbarText = text;
+              }); */
   },
 };
 </script>
