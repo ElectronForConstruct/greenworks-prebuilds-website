@@ -20,6 +20,7 @@ module.exports = {
     'vuetify/no-deprecated-classes'  : 'error',
     'vuetify/grid-unknown-attributes': 'error',
     'vuetify/no-legacy-grid'         : 'error',
+    'no-underscore-dangle': 0,
     // 'vue/return-in-computed-property': 0,
   },
   parserOptions: {

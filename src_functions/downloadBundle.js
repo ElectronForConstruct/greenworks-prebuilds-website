@@ -17,33 +17,47 @@ exports.handler = async function (event) {
 
   console.log('ids', ids);
 
-  for (let i = 0; i < ids.length; i += 1) {
-    try {
-      const id = ids[i];
-      const url = `https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases/assets/${id}`;
+  const pDownloads = [];
 
-      // eslint-disable-next-line
-      const infos = await got(url, { json: true });
-      // console.log('infos', infos.body);
+  try {
+    for (let i = 0; i < ids.length; i += 1) {
+      pDownloads.push(new Promise(async (resolve, reject) => {
+        const id = ids[i];
+        const url = `https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases/assets/${id}`;
 
-      // eslint-disable-next-line
-      const stream = got(url, {
-        stream: true,
-        headers: {
-          Accept: 'application/octet-stream',
-        },
-      });
+        const infos = await got(url, {
+          json: true,
+          headers: {
+            Authorization: `token ${'49f5687fc74189014c37fedce2fc2d85dda344f1'}`,
+          },
+        });
+        // console.log('infos', infos.body);
 
-      console.log(`File ${i}`);
+        const stream = got(url, {
+          stream: true,
+          headers: {
+            Accept: 'application/octet-stream',
+            Authorization: `token ${'49f5687fc74189014c37fedce2fc2d85dda344f1'}`,
+          },
+        });
 
-      zip.file(infos.body.name, stream);
-    } catch (e) {
-      console.error('error', e);
-      return {
-        statusCode: 500,
-        body: e,
-      };
+        console.log(`File ${i}`);
+
+        zip.file(infos.body.name, stream);
+        resolve(true);
+      }));
     }
+    try {
+      await Promise.all(pDownloads);
+    } catch (e) {
+      console.log('Error', e);
+    }
+  } catch (e) {
+    console.error('error', e);
+    return {
+      statusCode: 500,
+      body: e,
+    };
   }
 
   const body = await zip.generateAsync({

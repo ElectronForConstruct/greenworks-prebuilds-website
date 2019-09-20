@@ -85,16 +85,6 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-btn
-      fixed
-      bottom
-      right
-      fab
-      :disabled="selectedFiles.length === 0 || loadingDialog === true"
-      @click="dl">
-      <v-icon>fas fa-download</v-icon>
-    </v-btn>
-
     <v-row>
       <v-col cols="12" class="pb-2">
         <!--<v-text-field
@@ -106,30 +96,48 @@
         ></v-text-field>-->
       </v-col>
       <v-col cols="12">
-        <v-list v-if="selectedFiles.length > 0">
-          <transition-group name="slide-x-transition">
-            <version-line
-              v-for="asset in selectedFiles"
-              :key="asset.id"
-              :infos="asset"></version-line>
-          </transition-group>
-        </v-list>
-        <hr v-if="selectedFiles.length > 0">
-        <v-list :items="filteredReleaseAssets"
-                v-if="filteredReleaseAssets">
-          <v-progress-circular
-            class="centered-progress"
-            v-if="filteredReleaseAssets.length === 0"
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
-          <transition-group name="slide-x-transition">
-            <version-line
-              v-for="asset in filteredReleaseAssets"
-              :key="asset.id"
-              :infos="asset"></version-line>
-          </transition-group>
-        </v-list>
+        <v-data-table
+          v-model="selectedFiles"
+          :headers="headers"
+          :items="filteredReleaseAssets()"
+          item-key="name"
+          show-select
+          class="elevation-1"
+          search
+          :loading="isLoading"
+        >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-spacer></v-spacer>
+              <v-btn
+                :disabled="selectedFiles.length === 0 || loadingDialog === true"
+                @click="dl">
+                <v-icon left>fas fa-download</v-icon>
+                Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
+                {{ selectedFiles.length > 0
+                ? `(${selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1000000}MB)`
+                : '' }}
+              </v-btn>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.abi="{ item }">
+            <v-chip class="ma-1" color="green" label>{{ item.abi }}</v-chip>
+          </template>
+          <template v-slot:item.os="{ item }">
+            <v-chip class="ma-1" color="purple" label>{{ item.os }}</v-chip>
+          </template>
+          <template v-slot:item.runtime="{ item }">
+            <v-chip class="ma-1" color="red" label>{{ item.runtime }}</v-chip>
+          </template>
+          <template v-slot:item.size="{ item }">
+            <v-chip class="ma-1" label>{{ Math.round(item.size/1000000*100)/100 }}</v-chip>
+          </template>
+          <template v-slot:item.arch="{ item }">
+            <v-chip v-if="item.arch === 'x64'" class="ma-1" color="grey" label>64 bits</v-chip>
+            <v-chip v-else-if="item.arch === 'ia32'" class="ma-1" color="grey" label>32 bits</v-chip>
+            <v-chip v-else class="ma-1" color="grey" label>{{ item.arch }}</v-chip>
+          </template>
+        </v-data-table>
       </v-col>
 
       <v-dialog v-model="loadingDialog" width="500" persistent>
@@ -137,11 +145,15 @@
           <v-card-text>
             Preparing your files...
             <v-progress-linear
-              indeterminate
+              :indeterminate="downloadProgress === -1"
+              :value="downloadProgress"
               color="white"
               class="mb-0"
             ></v-progress-linear>
           </v-card-text>
+          <v-card-actions>
+            <v-btn :disabled="downloadProgress === -1" @click="loadingDialog = false">OK</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
@@ -150,11 +162,11 @@
 
 <script>
 import { saveAs } from 'file-saver';
-import ky from 'ky';
+import axios from 'axios';
 import semver from 'semver';
-import versionLine from '../components/VersionLine.vue';
+import abis from 'modules-abi';
 
-const sleep = m => new Promise(r => setTimeout(r, m));
+// const sleep = m => new Promise(r => setTimeout(r, m));
 
 const mapped = (asset) => {
   const arr = asset.name.split(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/);
@@ -168,7 +180,7 @@ const mapped = (asset) => {
 
 export default {
   name: 'home',
-  components: { versionLine },
+  components: { },
   filters: {
     formatName(value) {
       return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
@@ -233,34 +245,29 @@ export default {
     },
   },
   computed: {
-    filteredReleaseAssets() {
-      if (this.selectedRelease) {
-        const assets = [];
-        for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
-          const asset = this.selectedRelease.assets[i];
-          // eslint-disable-next-line
-            assets.push(mapped(asset));
-        }
-        return assets
-          .filter(this.filterOs)
-          .filter(this.filterArch)
-          .filter(this.filterRuntime)
-          .filter(this.filterVersion)
-          .reverse();
-      }
-      return [];
-    },
     selectedRelease() {
       return this.releases.find(r => r === this.selectedReleaseTag);
-    },
-    selectedFiles() {
-      return this.$store.state.selected;
     },
   },
   data() {
     return {
+      selectedFiles: [],
+      downloadProgress: -1,
       search: '',
       loadingDialog: false,
+      isLoading: true,
+      selected: [],
+      headers: [
+        {
+          text: 'ABI',
+          value: 'abi',
+        },
+        { text: 'Architecture', value: 'arch' },
+        { text: 'OS', value: 'os' },
+        { text: 'Runtime', value: 'runtime' },
+        { text: 'Size', value: 'size' },
+        { text: 'Last update', value: 'updated_at' },
+      ],
       os: [
         {
           name: 'Mac',
@@ -290,59 +297,37 @@ export default {
           value: true,
         },
       ],
-      runtime: [
-        {
-          name: 'Electron',
-          id: 'electron',
-          value: true,
-        },
-        {
-          name: 'NW.js',
-          id: 'nw.js',
-          value: true,
-        },
-        {
-          name: 'Node',
-          id: 'node',
-          value: true,
-        },
-      ],
-      version: [
-        {
-          name: '57',
-          value: true,
-        },
-        {
-          name: '59',
-          value: true,
-        },
-        {
-          name: '64',
-          value: true,
-        },
-        {
-          name: '67',
-          value: true,
-        },
-        {
-          name: '69',
-          value: true,
-        },
-        {
-          name: '70',
-          value: true,
-        },
-        {
-          name: '72',
-          value: true,
-        },
-      ],
+      runtime: [],
+      version: [],
 
       selectedReleaseTag: null,
       releases: [],
     };
   },
   methods: {
+    filteredReleaseAssets() {
+      if (this.selectedRelease) {
+        console.time('filteredReleaseAssets');
+        const assets = [];
+        for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
+          const asset = this.selectedRelease.assets[i];
+          // eslint-disable-next-line
+          assets.push(mapped(asset));
+        }
+        const ret = assets
+          .filter(this.filterOs)
+          .filter(this.filterArch)
+          .filter(this.filterRuntime)
+          .filter(this.filterVersion)
+          .reverse();
+        console.timeEnd('filteredReleaseAssets');
+        console.log(ret);
+        this.isLoading = false;
+        return ret;
+      }
+      this.isLoading = false;
+      return [];
+    },
     filterOs(asset) {
       if (this.$route.query.os && this.$route.query.os.length > 0) {
         const osFilter = this.$route.query.os.split(',');
@@ -371,28 +356,64 @@ export default {
       }
       return true;
     },
-    async dl() {
+    // eslint-disable-next-line
+      async dl() {
       this.loadingDialog = true;
-      console.log('ok');
-      await sleep(1000);
-      console.log('ok');
 
-      this.selectedFiles.map(file => file.id)
-        .join(',');
+      console.log(this.selectedFiles);
 
-      saveAs(`/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
-        .join(',')}`, 'greenworks-binaries.zip');
+      const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
+        .join(',')}`;
+      console.log(url);
 
+      try {
+        const { data } = await axios.get(url, {
+          responseType: 'blob',
+          onDownloadProgress(progress) {
+            console.log(progress);
+          },
+        });
 
-      this.loadingDialog = false;
+        saveAs(data, 'greenworks-binaries.zip');
+      } catch (e) {
+        console.log('Error downloading bundle', e);
+        this.loadingDialog = false;
+      }
     },
   },
   async mounted() {
-    const rep = await ky
-      .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases')
-      .json();
+    const uniq = (arr, key) => Array.from(new Set(arr.map(a => a[key])))
+      .map(id => arr.find(a => a[key] === id));
+    const toTitleCase = s => s.substr(0, 1)
+      .toUpperCase() + s.substr(1)
+      .toLowerCase();
 
-    this.releases = rep.filter(r => semver.gte(r.tag_name, '0.2.6'));
+    const _allReleases = await abis.getAll();
+    const allReleases = _allReleases.filter(release => release.abi >= 57);
+
+    this.version = uniq(allReleases, 'abi')
+      .map(el => el.abi)
+      .sort((a, b) => b - a) // descending, high on top
+      .map(el => ({
+        name: el.toString(),
+        value: true,
+      }));
+
+    this.runtime = uniq(allReleases, 'runtime')
+      .map(el => ({
+        name: toTitleCase(el.runtime.toString()),
+        id: el.runtime.toString(),
+        value: true,
+      }));
+
+    const rep = await axios
+      .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases', {
+        headers: {
+          Authorization: `token ${'49f5687fc74189014c37fedce2fc2d85dda344f1'}`,
+        },
+      });
+
+    this.releases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'));
     this.selectedReleaseTag = this.releases[0];
 
     const filters = ['os', 'arch', 'runtime', 'version'];

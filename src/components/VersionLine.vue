@@ -77,7 +77,7 @@ export default {
     const abi = parseInt(this.infos.abi.replace('v', ''), 10);
 
     try {
-      this.range = await abis.getRange(abi, rt);
+      // this.range = await abis.getRange(abi, rt);
     } catch (e) {
       console.error('Unable to get range', e);
     }
