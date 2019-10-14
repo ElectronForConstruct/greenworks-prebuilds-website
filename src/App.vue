@@ -15,6 +15,9 @@
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
         Github
       </v-btn>
+      <v-avatar>
+        <a :href="loginUrl()">Login</a>
+      </v-avatar>
     </v-app-bar>
 
     <v-content>
@@ -45,6 +48,13 @@ import githubIcon from './assets/github.png';
 
 export default {
   name: 'App',
+  methods: {
+    loginUrl() {
+      const isDev = process.env.NODE_ENV === 'development';
+      console.log('isDev', isDev);
+      return `https://github.com/login/oauth/authorize?client_id=${isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'}&allow_signup=true`;
+    },
+  },
   data() {
     return {
       snackbar: false,

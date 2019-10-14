@@ -21,6 +21,8 @@
     "modules-abi": "^0.3.4",
     "netlify-lambda": "^1.4.13",
     "register-service-worker": "^1.6.2",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
     "semver": "^6.2.0",
     "streamsaver": "^2.0.3",
     "vue": "^2.6.10",

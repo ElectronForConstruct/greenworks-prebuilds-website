@@ -134,7 +134,8 @@
           </template>
           <template v-slot:item.arch="{ item }">
             <v-chip v-if="item.arch === 'x64'" class="ma-1" color="grey" label>64 bits</v-chip>
-            <v-chip v-else-if="item.arch === 'ia32'" class="ma-1" color="grey" label>32 bits</v-chip>
+            <v-chip v-else-if="item.arch === 'ia32'" class="ma-1" color="grey" label>32 bits
+            </v-chip>
             <v-chip v-else class="ma-1" color="grey" label>{{ item.arch }}</v-chip>
           </template>
         </v-data-table>
@@ -180,7 +181,7 @@ const mapped = (asset) => {
 
 export default {
   name: 'home',
-  components: { },
+  components: {},
   filters: {
     formatName(value) {
       return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
@@ -262,11 +263,26 @@ export default {
           text: 'ABI',
           value: 'abi',
         },
-        { text: 'Architecture', value: 'arch' },
-        { text: 'OS', value: 'os' },
-        { text: 'Runtime', value: 'runtime' },
-        { text: 'Size', value: 'size' },
-        { text: 'Last update', value: 'updated_at' },
+        {
+          text: 'Architecture',
+          value: 'arch',
+        },
+        {
+          text: 'OS',
+          value: 'os',
+        },
+        {
+          text: 'Runtime',
+          value: 'runtime',
+        },
+        {
+          text: 'Size',
+          value: 'size',
+        },
+        {
+          text: 'Last update',
+          value: 'updated_at',
+        },
       ],
       os: [
         {
@@ -312,7 +328,7 @@ export default {
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
           const asset = this.selectedRelease.assets[i];
           // eslint-disable-next-line
-          assets.push(mapped(asset));
+            assets.push(mapped(asset));
         }
         const ret = assets
           .filter(this.filterOs)
@@ -356,14 +372,16 @@ export default {
       }
       return true;
     },
-    // eslint-disable-next-line
-      async dl() {
+    async dl() {
       this.loadingDialog = true;
 
       console.log(this.selectedFiles);
 
+      const token = localStorage.getItem('token');
+      console.log('my token', token);
+
       const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
-        .join(',')}`;
+        .join(',')}&token=${token}`;
       console.log(url);
 
       try {
@@ -371,10 +389,14 @@ export default {
           responseType: 'blob',
           onDownloadProgress(progress) {
             console.log(progress);
+            this.downloadProgress = progress.loaded / (
+              this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0)
+            );
           },
         });
 
         saveAs(data, 'greenworks-binaries.zip');
+        this.loadingDialog = false;
       } catch (e) {
         console.log('Error downloading bundle', e);
         this.loadingDialog = false;
