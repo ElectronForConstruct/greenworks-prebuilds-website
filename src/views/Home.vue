@@ -157,6 +157,17 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="showLoginModal" width="500" persistent>
+        <v-card>
+          <v-card-text>
+            You must login before being able to download files!
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="showLoginModal = false">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </div>
 </template>
@@ -257,6 +268,7 @@ export default {
       search: '',
       loadingDialog: false,
       isLoading: true,
+      showLoginModal: false,
       selected: [],
       headers: [
         {
@@ -373,12 +385,18 @@ export default {
       return true;
     },
     async dl() {
+      const token = localStorage.getItem('token');
+      console.log('my token', token);
+      if (!token) {
+        this.showLoginModal = true;
+        return;
+      }
+
+
       this.loadingDialog = true;
 
       console.log(this.selectedFiles);
 
-      const token = localStorage.getItem('token');
-      console.log('my token', token);
 
       const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
         .join(',')}&token=${token}`;

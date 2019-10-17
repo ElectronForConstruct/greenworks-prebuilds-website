@@ -51,7 +51,6 @@ export default {
   methods: {
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
-      console.log('isDev', isDev);
       return `https://github.com/login/oauth/authorize?client_id=${isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'}&allow_signup=true`;
     },
   },
