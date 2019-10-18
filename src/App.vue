@@ -15,9 +15,8 @@
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
         Github
       </v-btn>
-      <v-avatar>
-        <a :href="loginUrl()">Login</a>
-      </v-avatar>
+      <v-btn v-if="isLogged" text :href="disconnect()">Disconnect</v-btn>
+      <v-btn v-else text :href="loginUrl()">Login</v-btn>
     </v-app-bar>
 
     <v-content>
@@ -53,11 +52,16 @@ export default {
       const isDev = process.env.NODE_ENV === 'development';
       return `https://github.com/login/oauth/authorize?client_id=${isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'}&allow_signup=true`;
     },
+    disconnect() {
+      localStorage.removeItem('token');
+      this.isLogged = false;
+    },
   },
   data() {
     return {
       snackbar: false,
       snackbarText: '',
+      isLogged: false,
 
       releases: [],
       selectedReleaseTag: null,
@@ -67,6 +71,10 @@ export default {
         githubIcon,
       },
     };
+  },
+  mounted() {
+    const token = localStorage.getItem('token');
+    this.isLogged = !!token;
   },
 };
 </script>

@@ -3,12 +3,12 @@ import util from 'util';
 
 require('dotenv').config();
 
-const dl = util.promisify(request);
+const rq = util.promisify(request);
 
 exports.handler = async function (event) {
   const { code } = event.queryStringParameters;
 
-  const data = await dl({
+  const data = await rq({
     url: 'https://github.com/login/oauth/access_token',
     method: 'POST',
     json: {
