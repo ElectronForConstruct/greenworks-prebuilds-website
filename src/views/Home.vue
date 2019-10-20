@@ -129,7 +129,10 @@
                 <v-icon left>mdi-folder-zip-outline</v-icon>
                 Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
                 {{ selectedFiles.length > 0
-                ? `(${selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1000000}MB)`
+                ? `(${
+                Math.round(
+                  (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100 // 1049000 bytes to mib
+                }MB)`
                 : '' }}
               </v-btn>
             </v-toolbar>
@@ -144,7 +147,7 @@
             <v-chip class="ma-1" color="red" label>{{ item.runtime }}</v-chip>
           </template>
           <template v-slot:item.size="{ item }">
-            <v-chip class="ma-1" label>{{ Math.round(item.size/1000000*100)/100 }}</v-chip>
+            <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
           </template>
           <template v-slot:item.arch="{ item }">
             <v-chip v-if="item.arch === 'x64'" class="ma-1" color="grey" label>64 bits</v-chip>
