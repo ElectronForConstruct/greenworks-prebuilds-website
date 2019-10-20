@@ -131,7 +131,8 @@
                 {{ selectedFiles.length > 0
                 ? `(${
                 Math.round(
-                  (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100 // 1049000 bytes to mib
+                  (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100
+                // 1049000 bytes to mib
                 }MB)`
                 : '' }}
               </v-btn>
