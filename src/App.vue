@@ -15,7 +15,17 @@
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
         Github
       </v-btn>
-      <v-btn v-if="isLogged" text :href="disconnect()">Disconnect</v-btn>
+      <template v-if="isLogged">
+        <v-avatar class="ml-5">
+          <img
+            :src="user.avatar_url"
+            :alt="user.login"
+          >
+        </v-avatar>
+        <v-btn icon @click="disconnect()">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </template>
       <v-btn v-else text :href="loginUrl()">Login</v-btn>
     </v-app-bar>
 
@@ -41,16 +51,22 @@
 </template>
 
 <script>
+import ky from 'ky';
 import homeIcon from './assets/home.png';
 import donationIcon from './assets/donation.png';
 import githubIcon from './assets/github.png';
+
 
 export default {
   name: 'App',
   methods: {
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
-      return `https://github.com/login/oauth/authorize?client_id=${isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'}&allow_signup=true`;
+      return `https://github.com/login/oauth/authorize?client_id=${
+        isDev
+          ? 'e80afe92dc3477294936'
+          : '8af5faeab9599fc013ed'
+      }&allow_signup=true`;
     },
     disconnect() {
       localStorage.removeItem('token');
@@ -59,6 +75,7 @@ export default {
   },
   data() {
     return {
+      user: {},
       snackbar: false,
       snackbarText: '',
       isLogged: false,
@@ -72,9 +89,25 @@ export default {
       },
     };
   },
-  mounted() {
+  async created() {
     const token = localStorage.getItem('token');
+    console.log(token);
     this.isLogged = !!token;
+    console.log(this.isLogged);
+    if (this.isLogged) {
+      const resp = await ky
+        .get('https://api.github.com/user', {
+          headers: {
+            Authorization: `token ${token}`,
+            'User-Agent': 'Greenworks Prebuilds Downloader',
+          },
+        })
+        .json();
+      console.log('resp', resp);
+      if (resp.login) {
+        this.user = resp;
+      }
+    }
   },
 };
 </script>

@@ -176,7 +176,8 @@
         <v-card>
           <v-card-title class="headline">Warning</v-card-title>
           <v-card-text>
-            You must login before being able to download files!
+            Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!
+            (This is required in order to avoid download traffic limits.)
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -287,32 +288,32 @@ export default {
       isLoading: true,
       showLoginModal: false,
       selected: [],
-      iconSet: [
-        {
+      iconSet: {
+        darwin: {
           icon: 'mdi-apple',
-          name: 'darwin',
+          name: 'Mac',
         },
-        {
+        win32: {
           icon: 'mdi-windows',
-          name: 'win32',
+          name: 'Windows',
         },
-        {
+        linux: {
           icon: 'mdi-linux',
-          name: 'linux',
+          name: 'Linux',
         },
-        {
+        nodejs: {
           icon: 'mdi-nodejs',
-          name: 'nodejs',
+          name: 'Node.js',
         },
-        {
+        electron: {
           icon: 'mdi-electron',
-          name: 'electron',
+          name: 'Electron',
         },
-        {
+        'nw.js': {
           icon: 'mdi-compass',
-          name: 'nw.js',
+          name: 'NW.js',
         },
-      ],
+      },
       headers: [
         {
           text: 'ABI',
@@ -376,6 +377,14 @@ export default {
     };
   },
   methods: {
+    loginUrl() {
+      const isDev = process.env.NODE_ENV === 'development';
+      return `https://github.com/login/oauth/authorize?client_id=${
+        isDev
+          ? 'e80afe92dc3477294936'
+          : '8af5faeab9599fc013ed'
+      }&allow_signup=true`;
+    },
     filteredReleaseAssets() {
       if (this.selectedRelease) {
         console.time('filteredReleaseAssets');
@@ -430,7 +439,7 @@ export default {
     async dl() {
       const token = localStorage.getItem('token');
       console.log('my token', token);
-      if (!token) {
+      if (!token || token === 'undefined') {
         this.showLoginModal = true;
         return;
       }

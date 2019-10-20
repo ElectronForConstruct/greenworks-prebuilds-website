@@ -1,8 +1,6 @@
 import request from 'request';
 import util from 'util';
 
-require('dotenv').config();
-
 const rq = util.promisify(request);
 
 exports.handler = async function (event) {

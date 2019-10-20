@@ -11,18 +11,16 @@
       <div v-if="isOk" class="isOk">
         <div>
           <v-icon class="mb-5" :size="48" color="success">mdi-check-decagram</v-icon>
-          You're all set!
+          <p>You're all set!</p>
+          <p>You can go back to the homepage</p>
         </div>
-        <div>
-          You can go back to the homepage
-        </div>
-        <v-btn to="/">Back</v-btn>
       </div>
       <div v-else>
         <v-icon class="mb-5" :size="48" color="warning">mdi-alert</v-icon>
         <p>There was an error!</p>
         <p>Try again later</p>
       </div>
+      <v-btn to="/">Back</v-btn>
     </div>
   </div>
 </template>
@@ -41,11 +39,13 @@ export default {
   },
   async mounted() {
     this.code = this.$route.query.code;
+    console.log(this.code);
     const resp = await ky
       .get(`/.netlify/functions/getToken?code=${this.code}`)
       .json();
-    localStorage.setItem('token', resp.access_token);
+    console.log(resp);
     if (resp.access_token) {
+      localStorage.setItem('token', resp.access_token);
       this.isOk = true;
     }
     this.isLoading = false;
