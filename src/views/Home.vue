@@ -71,7 +71,7 @@
         </v-list-item>
 
         <v-subheader>Versions</v-subheader>
-        <v-list-item @click="() => {}" v-for="v in version" :key="v.name">
+        <v-list-item @click="() => {}" v-for="v in version.slice(0, maxVersionsShown)" :key="v.name">
           <v-list-item-action>
             <v-checkbox v-model="v.value"></v-checkbox>
           </v-list-item-action>
@@ -79,6 +79,13 @@
           <v-list-item-content @click="v.value = !v.value">
             <v-list-item-title>
               {{ v.name }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="maxVersionsShown < version.length" @click="maxVersionsShown = version.length">
+          <v-list-item-content>
+            <v-list-item-title>
+              Show more
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -263,6 +270,7 @@ export default {
   },
   data() {
     return {
+      maxVersionsShown: 5,
       selectedFiles: [],
       downloadProgress: -1,
       search: '',

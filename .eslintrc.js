@@ -21,7 +21,7 @@ module.exports = {
     'vuetify/grid-unknown-attributes': 'error',
     'vuetify/no-legacy-grid'         : 'error',
     'no-underscore-dangle': 0,
-    'linebeak-style': 0,
+    'linebreak-style': 0,
     // 'vue/return-in-computed-property': 0,
   },
   parserOptions: {
