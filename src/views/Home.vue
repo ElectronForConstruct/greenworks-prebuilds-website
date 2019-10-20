@@ -131,7 +131,7 @@
                 {{ selectedFiles.length > 0
                 ? `(${
                 Math.round(
-                  (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100
+                (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100
                 // 1049000 bytes to mib
                 }MB)`
                 : '' }}
@@ -139,22 +139,30 @@
             </v-toolbar>
           </template>
           <template v-slot:item.abi="{ item }">
-            <v-chip class="ma-1" color="green" label>{{ item.abi }}</v-chip>
+            <v-chip class="ma-1" color="green" label>
+              {{ item.abi }}
+            </v-chip>
           </template>
           <template v-slot:item.os="{ item }">
-            <v-chip class="ma-1" color="purple" label>{{ item.os }}</v-chip>
+            <v-chip class="ma-1" color="purple" label>
+              <v-icon left>{{ iconSet[item.os].icon }}</v-icon>
+              {{ iconSet[item.os].name }}
+            </v-chip>
           </template>
           <template v-slot:item.runtime="{ item }">
-            <v-chip class="ma-1" color="red" label>{{ item.runtime }}</v-chip>
+            <v-chip class="ma-1" color="red" label>
+              <v-icon left>{{ iconSet[item.runtime].icon }}</v-icon>
+              {{ iconSet[item.runtime].name }}
+            </v-chip>
           </template>
           <template v-slot:item.size="{ item }">
             <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
           </template>
           <template v-slot:item.arch="{ item }">
-            <v-chip v-if="item.arch === 'x64'" class="ma-1" color="grey" label>64 bits</v-chip>
-            <v-chip v-else-if="item.arch === 'ia32'" class="ma-1" color="grey" label>32 bits
+            <v-chip class="ma-1" color="grey" label>
+              <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
+              {{ iconSet[item.arch].name }}
             </v-chip>
-            <v-chip v-else class="ma-1" color="grey" label>{{ item.arch }}</v-chip>
           </template>
         </v-data-table>
       </v-col>
@@ -293,6 +301,14 @@ export default {
       showLoginModal: false,
       selected: [],
       iconSet: {
+        ia32: {
+          icon: 'mdi-cpu-32-bit',
+          name: '32 bits',
+        },
+        x64: {
+          icon: 'mdi-cpu-64-bit',
+          name: '64 bits',
+        },
         darwin: {
           icon: 'mdi-apple',
           name: 'Mac',
@@ -305,12 +321,12 @@ export default {
           icon: 'mdi-linux',
           name: 'Linux',
         },
-        nodejs: {
+        node: {
           icon: 'mdi-nodejs',
           name: 'Node.js',
         },
         electron: {
-          icon: 'mdi-electron',
+          icon: 'mdi-electron-framework',
           name: 'Electron',
         },
         'nw.js': {

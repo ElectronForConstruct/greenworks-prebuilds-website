@@ -26,7 +26,12 @@
           <v-icon>mdi-logout</v-icon>
         </v-btn>
       </template>
-      <v-btn v-else text :href="loginUrl()">Login</v-btn>
+      <template v-else>
+        <v-avatar class="ml-5">
+          <img :src="icons.guest">
+        </v-avatar>
+        <v-btn text :href="loginUrl()">Login</v-btn>
+      </template>
     </v-app-bar>
 
     <v-content>
@@ -55,6 +60,7 @@ import ky from 'ky';
 import homeIcon from './assets/home.png';
 import donationIcon from './assets/donation.png';
 import githubIcon from './assets/github.png';
+import guest from './assets/githubguest.png';
 
 
 export default {
@@ -86,6 +92,7 @@ export default {
         homeIcon,
         donationIcon,
         githubIcon,
+        guest,
       },
     };
   },
