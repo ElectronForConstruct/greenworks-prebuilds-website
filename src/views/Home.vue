@@ -71,7 +71,11 @@
         </v-list-item>
 
         <v-subheader>Versions</v-subheader>
-        <v-list-item @click="() => {}" v-for="v in version.slice(0, maxVersionsShown)" :key="v.name">
+        <v-list-item
+          @click="() => {}"
+          v-for="v in version.slice(0, maxVersionsShown)"
+          :key="v.name"
+        >
           <v-list-item-action>
             <v-checkbox v-model="v.value"></v-checkbox>
           </v-list-item-action>
@@ -82,7 +86,10 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="maxVersionsShown < version.length" @click="maxVersionsShown = version.length">
+        <v-list-item
+          v-if="maxVersionsShown < version.length"
+          @click="maxVersionsShown = version.length"
+        >
           <v-list-item-content>
             <v-list-item-title>
               Show more
@@ -119,7 +126,7 @@
               <v-btn
                 :disabled="selectedFiles.length === 0 || loadingDialog === true"
                 @click="dl">
-                <v-icon left>fas fa-download</v-icon>
+                <v-icon left>mdi-folder-zip-outline</v-icon>
                 Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
                 {{ selectedFiles.length > 0
                 ? `(${selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1000000}MB)`
@@ -167,10 +174,12 @@
 
       <v-dialog v-model="showLoginModal" width="500" persistent>
         <v-card>
+          <v-card-title class="headline">Warning</v-card-title>
           <v-card-text>
             You must login before being able to download files!
           </v-card-text>
           <v-card-actions>
+            <v-spacer></v-spacer>
             <v-btn @click="showLoginModal = false">OK</v-btn>
           </v-card-actions>
         </v-card>
@@ -278,6 +287,32 @@ export default {
       isLoading: true,
       showLoginModal: false,
       selected: [],
+      iconSet: [
+        {
+          icon: 'mdi-apple',
+          name: 'darwin',
+        },
+        {
+          icon: 'mdi-windows',
+          name: 'win32',
+        },
+        {
+          icon: 'mdi-linux',
+          name: 'linux',
+        },
+        {
+          icon: 'mdi-nodejs',
+          name: 'nodejs',
+        },
+        {
+          icon: 'mdi-electron',
+          name: 'electron',
+        },
+        {
+          icon: 'mdi-compass',
+          name: 'nw.js',
+        },
+      ],
       headers: [
         {
           text: 'ABI',
@@ -490,13 +525,24 @@ export default {
   th {
     > i {
       vertical-align: middle;
-      margin-right: 10px;
     }
   }
 
   .centered-progress {
     width: 100%;
     margin: 20px;
+  }
+
+  .sortable i {
+    margin-left: 10px;
+  }
+
+  .sortable span {
+    vertical-align: middle;
+  }
+
+  .v-data-footer__icons-after {
+    margin-right: 10px;
   }
 
 </style>

@@ -10,7 +10,7 @@
     <div v-else>
       <div v-if="isOk" class="isOk">
         <div>
-          <v-icon class="mb-5" :size="48" color="success">fas fa-check-circle</v-icon>
+          <v-icon class="mb-5" :size="48" color="success">mdi-check-decagram</v-icon>
           You're all set!
         </div>
         <div>
@@ -19,7 +19,7 @@
         <v-btn to="/">Back</v-btn>
       </div>
       <div v-else>
-        <v-icon class="mb-5" :size="48" color="warning">fas fa-exclamation-triangle</v-icon>
+        <v-icon class="mb-5" :size="48" color="warning">mdi-alert</v-icon>
         <p>There was an error!</p>
         <p>Try again later</p>
       </div>
