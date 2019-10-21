@@ -3,7 +3,7 @@
     <v-app-bar app fixed clipped-left persistant>
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
         <v-img class="mr-3" width="45" :src="icons.homeIcon"></v-img>
-        <span>GREENWORKS PREBUILD - DOWNLOADER</span>
+        <a class="title" href="/">GREENWORKS PREBUILD - DOWNLOADER</a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text class="mr-2" href="https://armaldio.xyz/donations" target="_blank">
@@ -98,9 +98,7 @@ export default {
   },
   async created() {
     const token = localStorage.getItem('token');
-    console.log(token);
     this.isLogged = !!token;
-    console.log(this.isLogged);
     if (this.isLogged) {
       const resp = await ky
         .get('https://api.github.com/user', {
@@ -118,3 +116,10 @@ export default {
   },
 };
 </script>
+
+<style>
+  .title {
+    color: white !important;
+    text-decoration: none;
+  }
+</style>

@@ -123,6 +123,7 @@
           <template v-slot:top>
             <v-toolbar flat>
               <v-spacer></v-spacer>
+              <v-btn class="mr-2" @click="shareModal = true">Share URL</v-btn>
               <v-btn
                 :disabled="selectedFiles.length === 0 || loadingDialog === true"
                 @click="dl">
@@ -137,11 +138,6 @@
                 : '' }}
               </v-btn>
             </v-toolbar>
-          </template>
-          <template v-slot:item.abi="{ item }">
-            <v-chip class="ma-1" color="green" label>
-              {{ item.abi }}
-            </v-chip>
           </template>
           <template v-slot:item.os="{ item }">
             <v-chip class="ma-1" color="purple" label>
@@ -163,6 +159,9 @@
               <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
               {{ iconSet[item.arch].name }}
             </v-chip>
+          </template>
+          <template v-slot:item.range="{ item }">
+            <Range :infos="item"></Range>
           </template>
         </v-data-table>
       </v-col>
@@ -197,6 +196,26 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="shareModal" width="500" persistent>
+        <v-card>
+          <v-card-title class="headline">URL sharing</v-card-title>
+          <v-card-text>
+            <p>You can share this URL to link directly to filtered assets</p>
+            <v-text-field
+              readonly
+              :value="shareURL()"
+              label="URL"
+              type="text"
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="copyToClipboard()">Copy URL</v-btn>
+            <v-btn @click="shareModal = false">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </div>
 </template>
@@ -206,6 +225,8 @@ import { saveAs } from 'file-saver';
 import axios from 'axios';
 import semver from 'semver';
 import abis from 'modules-abi';
+
+import Range from '../components/Range.vue';
 
 // const sleep = m => new Promise(r => setTimeout(r, m));
 
@@ -221,68 +242,12 @@ const mapped = (asset) => {
 
 export default {
   name: 'home',
-  components: {},
+  components: {
+    Range,
+  },
   filters: {
     formatName(value) {
       return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
-    },
-  },
-  watch: {
-    os: {
-      handler(newValue) {
-        const oses = newValue.map(x => (x.value ? x.id : null))
-          .filter(x => !!x)
-          .join(',');
-        console.log(oses);
-
-        this.$router.push({
-          name: this.$router.fullPath,
-          query: Object.assign({}, this.$route.query, { os: oses }),
-        });
-      },
-      deep: true,
-    },
-    arch: {
-      handler(newValue) {
-        console.log(this.$route.query);
-        const arches = newValue.map(x => (x.value ? x.id : null))
-          .filter(x => !!x)
-          .join(',');
-
-        this.$router.push({
-          name: this.$router.fullPath,
-          query: Object.assign({}, this.$route.query, { arch: arches }),
-        });
-      },
-      deep: true,
-    },
-    runtime: {
-      handler(newValue) {
-        console.log(this.$route.query);
-        const runtimes = newValue.map(x => (x.value ? x.id : null))
-          .filter(x => !!x)
-          .join(',');
-
-        this.$router.push({
-          name: this.$router.fullPath,
-          query: Object.assign({}, this.$route.query, { runtime: runtimes }),
-        });
-      },
-      deep: true,
-    },
-    version: {
-      handler(newValue) {
-        console.log(this.$route.query);
-        const versions = newValue.map(x => (x.value ? x.name : null))
-          .filter(x => !!x)
-          .join(',');
-
-        this.$router.push({
-          name: this.$router.fullPath,
-          query: Object.assign({}, this.$route.query, { version: versions }),
-        });
-      },
-      deep: true,
     },
   },
   computed: {
@@ -295,6 +260,7 @@ export default {
       maxVersionsShown: 5,
       selectedFiles: [],
       downloadProgress: -1,
+      shareModal: false,
       search: '',
       loadingDialog: false,
       isLoading: true,
@@ -336,10 +302,6 @@ export default {
       },
       headers: [
         {
-          text: 'ABI',
-          value: 'abi',
-        },
-        {
           text: 'Architecture',
           value: 'arch',
         },
@@ -354,6 +316,10 @@ export default {
         {
           text: 'Size',
           value: 'size',
+        },
+        {
+          text: 'Version range',
+          value: 'range',
         },
         {
           text: 'Last update',
@@ -397,6 +363,50 @@ export default {
     };
   },
   methods: {
+    shareURL() {
+      const oses = this.os.map(x => (x.value ? x.id : null))
+        .filter(x => !!x);
+      const arches = this.arch.map(x => (x.value ? x.id : null))
+        .filter(x => !!x);
+      const runtimes = this.runtime.map(x => (x.value ? x.id : null))
+        .filter(x => !!x);
+      const versions = this.version.map(x => (x.value ? x.name : null))
+        .filter(x => !!x);
+
+      const releaseTag = this.selectedReleaseTag;
+
+      const params = {};
+      if (this.os.length !== oses.length) {
+        params.os = oses;
+      }
+      if (this.arch.length !== arches.length) {
+        params.arch = arches;
+      }
+      if (this.runtime.length !== runtimes.length) {
+        params.runtime = runtimes;
+      }
+      if (this.version.length !== versions.length) {
+        params.version = versions;
+      }
+      if (releaseTag) {
+        params.tag = releaseTag.name;
+      }
+
+      const esc = encodeURIComponent;
+      const query = Object.keys(params)
+        .map(k => `${esc(k)}=${esc(params[k])}`)
+        .join('&');
+
+      return `${window.location.origin}?${query}`;
+    },
+    copyToClipboard() {
+      navigator.clipboard.writeText(this.shareURL())
+        .then(() => {
+          console.log('Async: Copying to clipboard was successful!');
+        }, (err) => {
+          console.error('Async: Could not copy text: ', err);
+        });
+    },
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
       return `https://github.com/login/oauth/authorize?client_id=${
@@ -407,7 +417,6 @@ export default {
     },
     filteredReleaseAssets() {
       if (this.selectedRelease) {
-        console.time('filteredReleaseAssets');
         const assets = [];
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
           const asset = this.selectedRelease.assets[i];
@@ -420,8 +429,6 @@ export default {
           .filter(this.filterRuntime)
           .filter(this.filterVersion)
           .reverse();
-        console.timeEnd('filteredReleaseAssets');
-        console.log(ret);
         this.isLoading = false;
         return ret;
       }
@@ -429,46 +436,33 @@ export default {
       return [];
     },
     filterOs(asset) {
-      if (this.$route.query.os && this.$route.query.os.length > 0) {
-        const osFilter = this.$route.query.os.split(',');
-        return osFilter.includes(asset.os);
-      }
-      return true;
+      const arches = this.arch.filter(arch => !!arch.value)
+        .map(arch => arch.id);
+      return arches.length === 0 ? true : arches.includes(asset.arch);
     },
     filterArch(asset) {
-      if (this.$route.query.arch && this.$route.query.arch.length > 0) {
-        const archFilter = this.$route.query.arch.split(',');
-        return archFilter.includes(asset.arch);
-      }
-      return true;
+      const oses = this.os.filter(os => !!os.value)
+        .map(os => os.id);
+      return oses.length === 0 ? true : oses.includes(asset.os);
     },
     filterRuntime(asset) {
-      if (this.$route.query.runtime && this.$route.query.runtime.length > 0) {
-        const runtimeFilter = this.$route.query.runtime.split(',');
-        return runtimeFilter.includes(asset.runtime);
-      }
-      return true;
+      const runtimes = this.runtime.filter(runtime => !!runtime.value)
+        .map(runtime => runtime.id);
+      return runtimes.length === 0 ? true : runtimes.includes(asset.runtime);
     },
     filterVersion(asset) {
-      if (this.$route.query.version && this.$route.query.version.length > 0) {
-        const versionFilter = this.$route.query.version.split(',');
-        return versionFilter.includes(asset.abi.replace('v', ''));
-      }
-      return true;
+      const versions = this.version.filter(version => !!version.value)
+        .map(version => version.name);
+      return versions.length === 0 ? true : versions.includes(asset.abi.replace('v', ''));
     },
     async dl() {
       const token = localStorage.getItem('token');
-      console.log('my token', token);
       if (!token || token === 'undefined') {
         this.showLoginModal = true;
         return;
       }
 
-
       this.loadingDialog = true;
-
-      console.log(this.selectedFiles);
-
 
       const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
         .join(',')}&token=${token}`;
@@ -493,9 +487,10 @@ export default {
       }
     },
   },
-  async mounted() {
+  async created() {
     const uniq = (arr, key) => Array.from(new Set(arr.map(a => a[key])))
       .map(id => arr.find(a => a[key] === id));
+
     const toTitleCase = s => s.substr(0, 1)
       .toUpperCase() + s.substr(1)
       .toLowerCase();
@@ -518,6 +513,19 @@ export default {
         value: true,
       }));
 
+    const filters = ['os', 'arch', 'runtime', 'version'];
+    filters.forEach((filter) => {
+      if (this.$route.query[filter]) {
+        const URLFilters = this.$route.query[filter].split(',');
+        this[filter].forEach((el) => {
+          // eslint-disable-next-line
+            el.value = URLFilters.includes(el.id ? el.id : el.name);
+        });
+      }
+    });
+
+    // ---------------
+
     const rep = await axios
       .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases', {
         headers: {
@@ -528,16 +536,14 @@ export default {
     this.releases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'));
     this.selectedReleaseTag = this.releases[0];
 
-    const filters = ['os', 'arch', 'runtime', 'version'];
-    filters.forEach((filter) => {
-      if (this.$route.query[filter] && this.$route.query[filter].length > 0) {
-        const URLFilters = this.$route.query[filter].split(',');
-        this[filter].forEach((el) => {
-          // eslint-disable-next-line
-            el.value = URLFilters.includes(el.id ? el.id : el.name);
-        });
-      }
-    });
+    const { tag } = this.$route.query;
+    if (tag) {
+      this.selectedReleaseTag = this.releases.find(release => release.name === tag);
+    }
+
+    // this.$router.replace({
+    //   query: {},
+    // });
   },
 };
 </script>
@@ -573,5 +579,4 @@ export default {
   .v-data-footer__icons-after {
     margin-right: 10px;
   }
-
 </style>
