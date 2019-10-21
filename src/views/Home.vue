@@ -123,7 +123,10 @@
           <template v-slot:top>
             <v-toolbar flat>
               <v-spacer></v-spacer>
-              <v-btn class="mr-2" @click="shareModal = true">Share URL</v-btn>
+              <v-btn class="mr-2" @click="shareModal = true">
+                <v-icon left>mdi-share-outline</v-icon>
+                Share URL
+              </v-btn>
               <v-btn
                 :disabled="selectedFiles.length === 0 || loadingDialog === true"
                 @click="dl">
@@ -159,6 +162,9 @@
               <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
               {{ iconSet[item.arch].name }}
             </v-chip>
+          </template>
+          <template v-slot:item.updated_at="{ item }">
+            {{ new Date(item.updated_at).toLocaleString() }}
           </template>
           <template v-slot:item.range="{ item }">
             <Range :infos="item"></Range>
