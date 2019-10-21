@@ -15,23 +15,48 @@
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
         Github
       </v-btn>
-      <template v-if="isLogged">
-        <v-avatar class="ml-5">
-          <img
-            :src="user.avatar_url"
-            :alt="user.login"
+      <v-menu bottom left>
+        <template v-slot:activator="{ on }">
+          <v-avatar v-if="isLogged" size="25" class="ml-5 user-avatar" v-on="on">
+            <img
+              :src="user.avatar_url"
+              :alt="user.login"
+            >
+          </v-avatar>
+          <v-avatar v-else size="25" class="ml-5 user-avatar" v-on="on">
+            <v-img :src="icons.guest"></v-img>
+          </v-avatar>
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-if="isLogged"
+            disabled
           >
-        </v-avatar>
-        <v-btn icon @click="disconnect()">
-          <v-icon>mdi-logout</v-icon>
-        </v-btn>
-      </template>
-      <template v-else>
-        <v-avatar class="ml-5">
-          <img :src="icons.guest">
-        </v-avatar>
-        <v-btn text :href="loginUrl()">Login</v-btn>
-      </template>
+            <v-list-item-title>
+              {{ user.email }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-if="isLogged"
+            @click="disconnect()"
+          >
+            <v-list-item-title>
+              <v-icon left>mdi-logout</v-icon>
+              Disconnect
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-else
+            :href="loginUrl()"
+          >
+            <v-list-item-title>
+              <v-icon left>mdi-login</v-icon>
+              Login
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
     <v-content>
@@ -44,10 +69,13 @@
       color="blue"
       bottom
       right
-      :timeout="30000">
+      :timeout="30000"
+    >
       {{ snackbarText }}
-      <v-btn text
-             @click="snackbar = false">
+      <v-btn
+        text
+        @click="snackbar = false"
+      >
         Close
       </v-btn>
     </v-snackbar>
@@ -79,6 +107,28 @@ export default {
       this.isLogged = false;
     },
   },
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        const token = localStorage.getItem('token');
+        this.isLogged = !!token;
+        if (this.isLogged) {
+          const resp = await ky
+            .get('https://api.github.com/user', {
+              headers: {
+                Authorization: `token ${token}`,
+                'User-Agent': 'Greenworks Prebuilds Downloader',
+              },
+            })
+            .json();
+          if (resp.login) {
+            this.user = resp;
+          }
+        }
+      },
+    },
+  },
   data() {
     return {
       user: {},
@@ -96,24 +146,6 @@ export default {
       },
     };
   },
-  async created() {
-    const token = localStorage.getItem('token');
-    this.isLogged = !!token;
-    if (this.isLogged) {
-      const resp = await ky
-        .get('https://api.github.com/user', {
-          headers: {
-            Authorization: `token ${token}`,
-            'User-Agent': 'Greenworks Prebuilds Downloader',
-          },
-        })
-        .json();
-      console.log('resp', resp);
-      if (resp.login) {
-        this.user = resp;
-      }
-    }
-  },
 };
 </script>
 
@@ -121,5 +153,9 @@ export default {
   .title {
     color: white !important;
     text-decoration: none;
+  }
+
+  .user-avatar {
+    cursor: pointer;
   }
 </style>

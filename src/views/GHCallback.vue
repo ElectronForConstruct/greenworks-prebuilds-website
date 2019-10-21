@@ -47,6 +47,7 @@ export default {
     if (resp.access_token) {
       localStorage.setItem('token', resp.access_token);
       this.isOk = true;
+      // this.$store.commit('SET_USER', )
     }
     this.isLoading = false;
   },
