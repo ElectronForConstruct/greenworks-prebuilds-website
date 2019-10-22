@@ -35,7 +35,7 @@
   "devDependencies": {
     "@mdi/font": "^4.5.95",
     "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^4.0.4",
     "@vue/cli-plugin-pwa": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
