@@ -29,7 +29,7 @@
     "vue-async-computed": "^3.7.0",
     "vue-fragment": "^1.5.1",
     "vue-router": "^3.0.3",
-    "vuetify": "^2.0.7",
+    "vuetify": "^2.1.6",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
