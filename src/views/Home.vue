@@ -191,10 +191,11 @@
 
       <v-dialog v-model="showLoginModal" width="500" persistent>
         <v-card>
-          <v-card-title class="headline">Warning</v-card-title>
+          <v-card-title class="headline">Download Info</v-card-title>
           <v-card-text>
-            Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!
-            (This is required in order to avoid download traffic limits.)
+            <span>Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!</span>
+            <br>
+            <span>(Required in order to avoid download traffic limits.)</span>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
