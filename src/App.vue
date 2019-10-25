@@ -17,13 +17,13 @@
       </v-btn>
       <v-menu bottom left>
         <template v-slot:activator="{ on }">
-          <v-avatar v-if="isLogged" size="25" class="ml-5 user-avatar" v-on="on">
+          <v-avatar v-if="isLogged" size="40" class="ml-5 user-avatar" tile v-on="on">
             <img
               :src="user.avatar_url"
               :alt="user.login"
             >
           </v-avatar>
-          <v-avatar v-else size="25" class="ml-5 user-avatar" v-on="on">
+          <v-avatar v-else size="40" class="ml-5 user-avatar" tile v-on="on">
             <v-img :src="icons.guest"></v-img>
           </v-avatar>
         </template>
@@ -149,7 +149,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
   .title {
     color: white !important;
     text-decoration: none;
@@ -157,5 +157,13 @@ export default {
 
   .user-avatar {
     cursor: pointer;
+  }
+
+  .user-avatar .v-image {
+    border-radius: 3px !important;
+  }
+
+  .user-avatar .v-image:hover {
+    opacity: .8;
   }
 </style>
