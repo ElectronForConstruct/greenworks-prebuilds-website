@@ -399,9 +399,8 @@ export default {
         params.tag = releaseTag.name;
       }
 
-      const esc = encodeURIComponent;
       const query = Object.keys(params)
-        .map(k => `${esc(k)}=${esc(params[k])}`)
+        .map(k => `${k}=${params[k]}`)
         .join('&');
 
       return `${window.location.origin}?${query}`;
