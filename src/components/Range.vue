@@ -2,7 +2,7 @@
   <v-chip label color="blue">
     {{ this.infos.abi }}
     ({{ range[0] ? range[0] : '' }}
-    <v-icon small>mdi-chevron-right</v-icon>
+    <v-icon small>mdi-arrow-right</v-icon>
     {{ range[1] ? range[1] : '' }})
   </v-chip>
 </template>
