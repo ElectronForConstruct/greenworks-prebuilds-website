@@ -109,6 +109,8 @@
           hide-details
         ></v-text-field>-->
       </v-col>
+
+      <!-- Here -->
       <v-col cols="12">
         <v-data-table
           v-model="selectedFiles"
@@ -132,14 +134,10 @@
                 @click="dl">
                 <v-icon left>mdi-folder-zip-outline</v-icon>
                 Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
-                {{ selectedFiles.length > 0
-                ? `(${
-                Math.round(
-                (selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000) * 100) / 100
-                // 1049000 bytes to mib
-                }MB)`
+                {{ selectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
                 : '' }}
               </v-btn>
+              <!-- 1049000 bytes to mib -->
             </v-toolbar>
           </template>
           <template v-slot:item.os="{ item }">
@@ -262,6 +260,13 @@ export default {
   computed: {
     selectedRelease() {
       return this.releases.find(r => r === this.selectedReleaseTag);
+    },
+    calculateTotalSize() {
+      return Math.round(
+        (
+          this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000
+        ) * 100,
+      ) / 100;
     },
   },
   data() {
