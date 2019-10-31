@@ -2,34 +2,17 @@
   <div class="home">
     <v-navigation-drawer clipped fixed app permanent :width="250">
       <v-list dense>
-        <v-subheader>Release Tag</v-subheader>
-
-        <v-radio-group v-model="selectedReleaseTag"
-                       mandatory
-                       class="full-width"
-                       v-if="releases.length > 0">
-          <v-list-item @click="() => {}"
-                       v-for="release in releases"
-                       :key="release.tag_name">
-            <v-list-item-action>
-              <v-radio :value="release"></v-radio>
-            </v-list-item-action>
-
-            <v-list-item-content @click="selectedReleaseTag = release">
-              <v-list-item-title>
-                {{ release.tag_name }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-radio-group>
-        <v-list-item @click="() => {}"
-                     v-else>
-          <v-list-item-content>
-            <v-list-item-title>
-              Loading releases...
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <v-list-item-content>
+          <v-select
+            :loading="releases.length === 0"
+            return-object
+            class="mx-2"
+            :items="releases"
+            v-model="selectedReleaseTag"
+            item-text="tag_name"
+            label="Release Tag"
+          ></v-select>
+        </v-list-item-content>
 
         <v-subheader>OS</v-subheader>
         <v-list-item @click="() => {}" v-for="o in os" :key="o.name">
