@@ -159,11 +159,11 @@ export default {
     cursor: pointer;
   }
 
-  .user-avatar .v-image {
+  .user-avatar .v-image, .user-avatar img {
     border-radius: 3px !important;
   }
 
-  .user-avatar .v-image:hover {
+  .user-avatar .v-image:hover, .user-avatar img:hover {
     opacity: .8;
   }
 </style>
