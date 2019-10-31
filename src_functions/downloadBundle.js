@@ -35,6 +35,14 @@ const downloadFromId = async (id, token) => {
   };
 };
 
+const assoc = {
+  linux: 'linux',
+  darwin: 'osx',
+  win32: 'win',
+  x64: '64',
+  ia32: '32',
+};
+
 exports.handler = async function (event) {
   const { ids: _ids, token } = event.queryStringParameters;
 
@@ -54,8 +62,12 @@ exports.handler = async function (event) {
   }
   const files = await Promise.all(pDownloads);
   files.forEach((file) => {
-    console.log(`Adding ${file.name}`);
-    zip.file(file.name, file.content);
+    const { name } = file;
+    const regFile = /(.*)-(.*)-(.*)-(.*)-(.*)\.node/.exec(name);
+    console.log(regFile);
+    const [, , runtime, abi, os, arch] = regFile;
+    console.log(`Adding ${name} (${runtime}, ${abi}, ${os}, ${arch})`);
+    zip.file(`${runtime}/${abi}/greenworks-${assoc[os]}${assoc[arch]}.node`, file.content);
   });
 
   console.log('All files prepared');
