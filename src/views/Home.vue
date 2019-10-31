@@ -193,7 +193,9 @@
         <v-card>
           <v-card-title class="headline">Download Info</v-card-title>
           <v-card-text>
-            <span>Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!</span>
+            <span>
+              Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!
+            </span>
             <br>
             <span>(Required in order to avoid download traffic limits.)</span>
           </v-card-text>
