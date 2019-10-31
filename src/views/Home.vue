@@ -273,7 +273,7 @@ export default {
       downloadProgress: -1,
       shareModal: false,
       search: '',
-      loadingDialog: true,
+      loadingDialog: false,
       isLoading: true,
       showLoginModal: false,
       selected: [],
