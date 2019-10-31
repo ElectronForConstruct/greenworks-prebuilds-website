@@ -172,8 +172,8 @@
 
       <v-dialog v-model="loadingDialog" width="500" persistent>
         <v-card>
-          <v-card-text>
-            Preparing your files...
+          <v-card-text class="text-center">
+            <div class="py-2">Preparing your files...</div>
             <v-progress-linear
               :indeterminate="downloadProgress === -1"
               :value="downloadProgress"
@@ -181,9 +181,6 @@
               class="mb-0"
             ></v-progress-linear>
           </v-card-text>
-          <v-card-actions>
-            <v-btn :disabled="downloadProgress === -1" @click="loadingDialog = false">OK</v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
 
@@ -276,7 +273,7 @@ export default {
       downloadProgress: -1,
       shareModal: false,
       search: '',
-      loadingDialog: false,
+      loadingDialog: true,
       isLoading: true,
       showLoginModal: false,
       selected: [],
