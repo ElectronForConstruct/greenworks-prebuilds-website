@@ -195,10 +195,28 @@
               label="URL"
               type="text"
             ></v-text-field>
+            <v-text-field
+              readonly
+              :value="shortenedURL"
+              label="Shortened URL"
+              type="text"
+            >
+            </v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="copyToClipboard()">Copy URL</v-btn>
+            <v-btn
+              v-if="shortenedURL"
+              @click="copyToClipboard(shortenedURL)">
+              Copy short URL
+            </v-btn>
+            <v-btn
+              v-else
+              :loading="generatingURL"
+              @click="generateShortURL()">
+              Generate short URL
+            </v-btn>
+            <v-btn @click="copyToClipboard(shareURL())">Copy URL</v-btn>
             <v-btn @click="shareModal = false">OK</v-btn>
           </v-card-actions>
         </v-card>
@@ -251,6 +269,8 @@ export default {
   },
   data() {
     return {
+      generatingURL: false,
+      shortenedURL: '',
       maxVersionsShown: 5,
       selectedFiles: [],
       downloadProgress: -1,
@@ -357,6 +377,20 @@ export default {
     };
   },
   methods: {
+    async generateShortURL() {
+      this.generatingURL = true;
+      try {
+        const { data } = await axios.post('https://link.armaldio.xyz/api', {
+          path: this.shareURL(),
+        });
+        this.shortenedURL = data.path;
+        this.generatingURL = false;
+      } catch (e) {
+        console.error(e);
+        this.shortenedURL = 'Error generating URL';
+        this.generatingURL = false;
+      }
+    },
     shareURL() {
       const oses = this.os.map(x => (x.value ? x.id : null))
         .filter(x => !!x);
@@ -392,8 +426,8 @@ export default {
 
       return `${window.location.origin}?${query}`;
     },
-    copyToClipboard() {
-      navigator.clipboard.writeText(this.shareURL())
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text)
         .then(() => {
           console.log('Async: Copying to clipboard was successful!');
         }, (err) => {
@@ -533,10 +567,6 @@ export default {
     if (tag) {
       this.selectedReleaseTag = this.releases.find(release => release.name === tag);
     }
-
-    // this.$router.replace({
-    //   query: {},
-    // });
   },
 };
 </script>
