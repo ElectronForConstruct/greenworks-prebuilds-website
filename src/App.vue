@@ -2,7 +2,8 @@
   <v-app>
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
-        <v-img class="mr-3" width="45" :src="icons.homeIcon"></v-img>
+        <v-app-bar-nav-icon @click.stop="toggleDrawer" />
+        <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
         <a class="title" href="/">
           GREENWORKS PREBUILD - DOWNLOADER
           <v-chip class="ml-4">BETA</v-chip>
@@ -97,6 +98,9 @@ import guest from './assets/githubguest.png';
 export default {
   name: 'App',
   methods: {
+    toggleDrawer() {
+      this.$store.commit('SET_DRAWER', !this.$store.state.drawer);
+    },
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
       return `https://github.com/login/oauth/authorize?client_id=${
@@ -134,6 +138,7 @@ export default {
   },
   data() {
     return {
+      drawer: true,
       user: {},
       snackbar: false,
       snackbarText: '',

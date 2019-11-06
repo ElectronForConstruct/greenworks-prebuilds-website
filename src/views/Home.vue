@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <v-navigation-drawer clipped fixed app permanent :width="300">
+    <v-navigation-drawer v-model="$store.state.drawer" clipped fixed app :width="300">
       <v-list dense>
         <v-list-item-content>
           <v-select
@@ -21,7 +21,6 @@
           label="OS"
           item-text="name"
           item-value="id"
-          chips
           multiple
         >
           <template v-slot:prepend-item>
@@ -52,7 +51,6 @@
           label="Architecture"
           item-text="name"
           item-value="id"
-          chips
           multiple
         >
           <template v-slot:prepend-item>
@@ -83,7 +81,6 @@
           label="Runtime"
           item-text="name"
           item-value="id"
-          chips
           multiple
         >
           <template v-slot:prepend-item>
@@ -114,9 +111,19 @@
           label="Versions"
           item-text="name"
           item-value="id"
-          chips
           multiple
         >
+          <template v-slot:selection="{ item, index }">
+            <div v-if="index <= 2" style="white-space: pre;">
+              {{ item.name }}
+              {{ includeComma(index, selectedVersion.length) ? ', ' : '' }}
+            </div>
+            <span
+              v-if="index === 3"
+              class="grey--text caption"
+            >(+{{ selectedVersion.length - 3 }}
+              other{{ selectedVersion.length - 3 > 1 ? 's' : '' }})</span>
+          </template>
           <template v-slot:prepend-item>
             <v-list-item
               ripple
@@ -182,13 +189,13 @@
             </v-toolbar>
           </template>
           <template v-slot:item.os="{ item }">
-            <v-chip class="ma-1" color="purple" label>
+            <v-chip class="ma-1" :color="iconSet[item.os].color" label>
               <v-icon left>{{ iconSet[item.os].icon }}</v-icon>
               {{ iconSet[item.os].name }}
             </v-chip>
           </template>
           <template v-slot:item.runtime="{ item }">
-            <v-chip class="ma-1" color="red" label>
+            <v-chip class="ma-1" :color="iconSet[item.runtime].color" label>
               <v-icon left>{{ iconSet[item.runtime].icon }}</v-icon>
               {{ iconSet[item.runtime].name }}
             </v-chip>
@@ -197,7 +204,7 @@
             <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
           </template>
           <template v-slot:item.arch="{ item }">
-            <v-chip class="ma-1" color="grey" label>
+            <v-chip class="ma-1" :color="iconSet[item.arch].color" label>
               <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
               {{ iconSet[item.arch].name }}
             </v-chip>
@@ -342,34 +349,42 @@ export default {
         ia32: {
           icon: 'mdi-cpu-32-bit',
           name: '32 bits',
+          color: 'red',
         },
         x64: {
           icon: 'mdi-cpu-64-bit',
           name: '64 bits',
+          color: 'blue',
         },
         darwin: {
           icon: 'mdi-apple',
           name: 'Mac',
+          color: '#959595',
         },
         win32: {
           icon: 'mdi-windows',
           name: 'Windows',
+          color: '#0078d7',
         },
         linux: {
           icon: 'mdi-linux',
           name: 'Linux',
+          color: '#E99829',
         },
         node: {
           icon: 'mdi-nodejs',
           name: 'Node.js',
+          color: '#6cc24a',
         },
         electron: {
           icon: 'mdi-electron-framework',
           name: 'Electron',
+          color: '#2F3241',
         },
         'nw.js': {
           icon: 'mdi-compass',
           name: 'NW.js',
+          color: '#1579A5',
         },
       },
       headers: [
@@ -434,6 +449,9 @@ export default {
     };
   },
   methods: {
+    includeComma(index, length) {
+      return (index !== length - 1 && index < 2);
+    },
     allChecked(name, source) {
       return this[name].length === this[source].length;
     },
@@ -609,6 +627,13 @@ export default {
       ['runtime', 'selectedRuntime'],
       ['version', 'selectedVersion'],
     ];
+    // fill everything
+    filters.forEach(([filter, bind]) => {
+      console.log(this[filter]);
+      this[bind] = this[filter].map(f => f.id);
+    });
+
+    // fill only what is in the query
     filters.forEach(([filter, bind]) => {
       if (this.$route.query[filter]) {
         this[bind] = this.$route.query[filter].split(',');
