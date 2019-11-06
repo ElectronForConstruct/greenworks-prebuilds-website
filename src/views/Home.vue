@@ -349,7 +349,7 @@ export default {
         ia32: {
           icon: 'mdi-cpu-32-bit',
           name: '32 bits',
-          color: 'red',
+          color: '#c83227',
         },
         x64: {
           icon: 'mdi-cpu-64-bit',
