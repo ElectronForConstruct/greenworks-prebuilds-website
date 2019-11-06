@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <v-navigation-drawer clipped fixed app permanent :width="250">
+    <v-navigation-drawer clipped fixed app permanent :width="300">
       <v-list dense>
         <v-list-item-content>
           <v-select
             :loading="releases.length === 0"
             return-object
-            class="mx-2"
+            class="mx-3"
             :items="releases"
             v-model="selectedReleaseTag"
             item-text="tag_name"
@@ -14,8 +14,8 @@
           ></v-select>
         </v-list-item-content>
 
-        <v-subheader>OS</v-subheader>
         <v-select
+          class="mx-3"
           v-model="selectedOs"
           :items="os"
           label="OS"
@@ -24,91 +24,119 @@
           chips
           multiple
         >
-        <template v-slot:prepend-item>
-          <v-list-item
-            ripple
-            @click="toggleSelection('selectedOs', 'os')"
-          >
-            <v-list-item-action>
-              <v-icon
-              :color="selectedOs.length > 0 ? 'indigo darken-4' : ''"
+          <template v-slot:prepend-item>
+            <v-list-item
+              ripple
+              @click="toggleSelection('selectedOs', 'os')"
             >
-              {{ true ? 'mdi-close-box' : 'mdi-minus-box' }}
-            </v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Select All</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="mt-2"></v-divider>
-        </template>
+              <v-list-item-action>
+                <v-icon v-if="selectedOs.length === 0">
+                  mdi-checkbox-blank-outline
+                </v-icon>
+                <v-icon v-else>
+                  {{ allChecked('selectedOs', 'os') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Select All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+          </template>
         </v-select>
-        <!-- -->
-        <v-list-item @click="() => {}" v-for="o in os" :key="o.name">
-          <v-list-item-action>
-            <v-checkbox v-model="o.value"></v-checkbox>
-          </v-list-item-action>
 
-          <v-list-item-content @click="o.value = !o.value">
-            <v-list-item-title>
-              {{ o.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <!-- -->
-
-        <v-subheader>Arch</v-subheader>
-        <v-list-item @click="() => {}" v-for="a in arch" :key="a.name">
-          <v-list-item-action>
-            <v-checkbox v-model="a.value"></v-checkbox>
-          </v-list-item-action>
-
-          <v-list-item-content @click="a.value = !a.value">
-            <v-list-item-title>
-              {{ a.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-subheader>Runtime</v-subheader>
-        <v-list-item @click="() => {}" v-for="r in runtime" :key="r.name">
-          <v-list-item-action>
-            <v-checkbox v-model="r.value"></v-checkbox>
-          </v-list-item-action>
-
-          <v-list-item-content @click="r.value = !r.value">
-            <v-list-item-title>
-              {{ r.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-subheader>Versions</v-subheader>
-        <v-list-item
-          @click="() => {}"
-          v-for="v in version.slice(0, maxVersionsShown)"
-          :key="v.name"
+        <v-select
+          class="mx-3"
+          v-model="selectedArch"
+          :items="arch"
+          label="Architecture"
+          item-text="name"
+          item-value="id"
+          chips
+          multiple
         >
-          <v-list-item-action>
-            <v-checkbox v-model="v.value"></v-checkbox>
-          </v-list-item-action>
+          <template v-slot:prepend-item>
+            <v-list-item
+              ripple
+              @click="toggleSelection('selectedArch', 'arch')"
+            >
+              <v-list-item-action>
+                <v-icon v-if="selectedArch.length === 0">
+                  mdi-checkbox-blank-outline
+                </v-icon>
+                <v-icon v-else>
+                  {{ allChecked('selectedArch', 'arch') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Select All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+          </template>
+        </v-select>
 
-          <v-list-item-content @click="v.value = !v.value">
-            <v-list-item-title>
-              {{ v.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
-          v-if="maxVersionsShown < version.length"
-          @click="maxVersionsShown = version.length"
+        <v-select
+          class="mx-3"
+          v-model="selectedRuntime"
+          :items="runtime"
+          label="Runtime"
+          item-text="name"
+          item-value="id"
+          chips
+          multiple
         >
-          <v-list-item-content>
-            <v-list-item-title>
-              Show more
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+          <template v-slot:prepend-item>
+            <v-list-item
+              ripple
+              @click="toggleSelection('selectedRuntime', 'runtime')"
+            >
+              <v-list-item-action>
+                <v-icon v-if="selectedRuntime.length === 0">
+                  mdi-checkbox-blank-outline
+                </v-icon>
+                <v-icon v-else>
+                  {{ allChecked('selectedRuntime', 'runtime') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Select All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+          </template>
+        </v-select>
+
+        <v-select
+          class="mx-3"
+          v-model="selectedVersion"
+          :items="version"
+          label="Versions"
+          item-text="name"
+          item-value="id"
+          chips
+          multiple
+        >
+          <template v-slot:prepend-item>
+            <v-list-item
+              ripple
+              @click="toggleSelection('selectedVersion', 'version')"
+            >
+              <v-list-item-action>
+                <v-icon v-if="selectedVersion.length === 0">
+                  mdi-checkbox-blank-outline
+                </v-icon>
+                <v-icon v-else>
+                  {{ allChecked('selectedVersion', 'version') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Select All</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+          </template>
+        </v-select>
       </v-list>
     </v-navigation-drawer>
 
@@ -256,10 +284,10 @@
 </template>
 
 <script>
-import { saveAs } from 'file-saver';
 import axios from 'axios';
-import semver from 'semver';
+import { saveAs } from 'file-saver';
 import abis from 'modules-abi';
+import semver from 'semver';
 
 import Range from '../components/Range.vue';
 
@@ -385,19 +413,20 @@ export default {
           id: 'linux',
         },
       ],
+      selectedArch: [],
       arch: [
         {
           name: '64 bits',
           id: 'x64',
-          value: true,
         },
         {
           name: '32 bits',
           id: 'ia32',
-          value: true,
         },
       ],
+      selectedRuntime: [],
       runtime: [],
+      selectedVersion: [],
       version: [],
 
       selectedReleaseTag: null,
@@ -405,13 +434,17 @@ export default {
     };
   },
   methods: {
+    allChecked(name, source) {
+      return this[name].length === this[source].length;
+    },
     toggleSelection(name, source) {
       this.$nextTick(() => {
-        const allSelected = name.length === source.length; // this[name].filter()
+        const allSelected = this.allChecked(name, source);
         if (allSelected) {
           this[name] = [];
         } else {
-          this[name] = this.os.map(os => os.value).slice();
+          console.log(this[source].map(entry => entry.id));
+          this[name] = this[source].map(entry => entry.id);
         }
       });
     },
@@ -430,14 +463,10 @@ export default {
       }
     },
     shareURL() {
-      const oses = this.os.map(x => (x.value ? x.id : null))
-        .filter(x => !!x);
-      const arches = this.arch.map(x => (x.value ? x.id : null))
-        .filter(x => !!x);
-      const runtimes = this.runtime.map(x => (x.value ? x.id : null))
-        .filter(x => !!x);
-      const versions = this.version.map(x => (x.value ? x.name : null))
-        .filter(x => !!x);
+      const oses = this.selectedOs;
+      const arches = this.selectedArch;
+      const runtimes = this.selectedRuntime;
+      const versions = this.selectedVersion;
 
       const releaseTag = this.selectedReleaseTag;
 
@@ -500,24 +529,20 @@ export default {
       this.isLoading = false;
       return [];
     },
-    filterOs(asset) {
-      const arches = this.arch.filter(arch => !!arch.value)
-        .map(arch => arch.id);
+    filterArch(asset) {
+      const arches = this.selectedArch;
       return arches.length === 0 ? true : arches.includes(asset.arch);
     },
-    filterArch(asset) {
-      const oses = this.os.filter(os => !!os.value)
-        .map(os => os.id);
+    filterOs(asset) {
+      const oses = this.selectedOs;
       return oses.length === 0 ? true : oses.includes(asset.os);
     },
     filterRuntime(asset) {
-      const runtimes = this.runtime.filter(runtime => !!runtime.value)
-        .map(runtime => runtime.id);
+      const runtimes = this.selectedRuntime;
       return runtimes.length === 0 ? true : runtimes.includes(asset.runtime);
     },
     filterVersion(asset) {
-      const versions = this.version.filter(version => !!version.value)
-        .map(version => version.name);
+      const versions = this.selectedVersion;
       return versions.length === 0 ? true : versions.includes(asset.abi.replace('v', ''));
     },
     async dl() {
@@ -567,8 +592,8 @@ export default {
       .map(el => el.abi)
       .sort((a, b) => b - a) // descending, high on top
       .map(el => ({
-        name: el.toString(),
-        value: true,
+        id: el.toString(),
+        name: `v${el.toString()}`,
       }));
 
     this.runtime = uniq(allReleases, 'runtime')
@@ -578,14 +603,15 @@ export default {
         value: true,
       }));
 
-    const filters = ['os', 'arch', 'runtime', 'version'];
-    filters.forEach((filter) => {
+    const filters = [
+      ['os', 'selectedOs'],
+      ['arch', 'selectedArch'],
+      ['runtime', 'selectedRuntime'],
+      ['version', 'selectedVersion'],
+    ];
+    filters.forEach(([filter, bind]) => {
       if (this.$route.query[filter]) {
-        const URLFilters = this.$route.query[filter].split(',');
-        this[filter].forEach((el) => {
-          // eslint-disable-next-line
-            el.value = URLFilters.includes(el.id ? el.id : el.name);
-        });
+        this[bind] = this.$route.query[filter].split(',');
       }
     });
 

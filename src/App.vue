@@ -3,7 +3,10 @@
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
         <v-img class="mr-3" width="45" :src="icons.homeIcon"></v-img>
-        <a class="title" href="/">GREENWORKS PREBUILD - DOWNLOADER</a>
+        <a class="title" href="/">
+          GREENWORKS PREBUILD - DOWNLOADER
+          <v-chip class="ml-4">BETA</v-chip>
+        </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text class="mr-2" href="https://armaldio.xyz/donations" target="_blank">
