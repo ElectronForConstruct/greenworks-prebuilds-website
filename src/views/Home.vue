@@ -15,6 +15,35 @@
         </v-list-item-content>
 
         <v-subheader>OS</v-subheader>
+        <v-select
+          v-model="selectedOs"
+          :items="os"
+          label="OS"
+          item-text="name"
+          item-value="id"
+          chips
+          multiple
+        >
+        <template v-slot:prepend-item>
+          <v-list-item
+            ripple
+            @click="toggleSelection('selectedOs', 'os')"
+          >
+            <v-list-item-action>
+              <v-icon
+              :color="selectedOs.length > 0 ? 'indigo darken-4' : ''"
+            >
+              {{ true ? 'mdi-close-box' : 'mdi-minus-box' }}
+            </v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Select All</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider class="mt-2"></v-divider>
+        </template>
+        </v-select>
+        <!-- -->
         <v-list-item @click="() => {}" v-for="o in os" :key="o.name">
           <v-list-item-action>
             <v-checkbox v-model="o.value"></v-checkbox>
@@ -26,6 +55,7 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <!-- -->
 
         <v-subheader>Arch</v-subheader>
         <v-list-item @click="() => {}" v-for="a in arch" :key="a.name">
@@ -340,21 +370,19 @@ export default {
           value: 'updated_at',
         },
       ],
+      selectedOs: [],
       os: [
         {
           name: 'Mac',
           id: 'darwin',
-          value: true,
         },
         {
           name: 'Windows',
           id: 'win32',
-          value: true,
         },
         {
           name: 'Linux',
           id: 'linux',
-          value: true,
         },
       ],
       arch: [
@@ -377,6 +405,16 @@ export default {
     };
   },
   methods: {
+    toggleSelection(name, source) {
+      this.$nextTick(() => {
+        const allSelected = name.length === source.length; // this[name].filter()
+        if (allSelected) {
+          this[name] = [];
+        } else {
+          this[name] = this.os.map(os => os.value).slice();
+        }
+      });
+    },
     async generateShortURL() {
       this.generatingURL = true;
       try {
