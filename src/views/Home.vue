@@ -616,7 +616,7 @@ export default {
 
     this.runtime = uniq(allReleases, 'runtime')
       .map(el => ({
-        name: toTitleCase(el.runtime.toString()),
+        name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
         id: el.runtime.toString(),
         value: true,
       }));
