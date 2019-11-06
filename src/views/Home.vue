@@ -354,7 +354,7 @@ export default {
         x64: {
           icon: 'mdi-cpu-64-bit',
           name: '64 bits',
-          color: '#23B2B2',
+          color: '#1C8E8E',
         },
         darwin: {
           icon: 'mdi-apple',
