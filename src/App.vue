@@ -3,7 +3,14 @@
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
 
-        <v-tooltip
+        <v-badge top right overlap class="mr-5 ma-4">
+          <template v-slot:badge>
+            <span>!</span>
+          </template>
+          <v-icon large @click.stop="toggleDrawer">mdi-menu</v-icon>
+        </v-badge>
+
+        <!-- <v-tooltip
           open-delay="1000000"
           content-class="waving"
           nudge-bottom="5"
@@ -17,7 +24,8 @@
             <v-icon>mdi-arrow-up</v-icon>
             Expand side bar to modify search filters
           </span>
-        </v-tooltip>
+        </v-tooltip> -->
+
         <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
         <a class="title" href="/">
           GREENWORKS PREBUILD - DOWNLOADER
