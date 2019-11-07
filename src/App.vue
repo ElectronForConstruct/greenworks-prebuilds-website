@@ -201,12 +201,12 @@ export default {
   }
 
   .waving {
-    animation: upDown 1.5s alternate infinite ease-in-out;
+    animation: upDown .5s alternate infinite ease-in-out;
   }
 
   @keyframes upDown {
     to {
-      transform: translatey(5px);
+      transform: translatey(3px);
     }
   }
 </style>
