@@ -2,7 +2,22 @@
   <v-app>
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
-        <v-app-bar-nav-icon @click.stop="toggleDrawer" />
+
+        <v-tooltip
+          open-delay="1000000"
+          content-class="waving"
+          nudge-bottom="5"
+          v-model="showTooltip"
+          bottom fixed
+        >
+          <template v-slot:activator="{ on }">
+            <v-app-bar-nav-icon v-on="on" @click.stop="toggleDrawer"/>
+          </template>
+          <span>
+            <v-icon>mdi-arrow-up</v-icon>
+            Expand side bar to modify search filters
+          </span>
+        </v-tooltip>
         <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
         <a class="title" href="/">
           GREENWORKS PREBUILD - DOWNLOADER
@@ -97,9 +112,19 @@ import guest from './assets/githubguest.png';
 
 export default {
   name: 'App',
+  mounted() {
+    console.log(localStorage.getItem('tooltip') === 'true');
+    if (localStorage.getItem('tooltip')) {
+      this.showTooltip = localStorage.getItem('tooltip') === 'true';
+    } else {
+      this.showTooltip = true;
+    }
+  },
   methods: {
     toggleDrawer() {
       this.$store.commit('SET_DRAWER', !this.$store.state.drawer);
+      this.showTooltip = false;
+      localStorage.setItem('tooltip', 'false');
     },
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
@@ -138,7 +163,7 @@ export default {
   },
   data() {
     return {
-      drawer: true,
+      showTooltip: true,
       user: {},
       snackbar: false,
       snackbarText: '',
@@ -173,5 +198,15 @@ export default {
 
   .user-avatar .v-image:hover, .user-avatar img:hover {
     opacity: .8;
+  }
+
+  .waving {
+    animation: upDown 1.5s alternate infinite ease-in-out;
+  }
+
+  @keyframes upDown {
+    to {
+      transform: translatey(5px);
+    }
   }
 </style>

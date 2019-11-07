@@ -121,8 +121,7 @@
             <span
               v-if="index === 3"
               class="grey--text caption"
-            >(+{{ selectedVersion.length - 3 }}
-              other{{ selectedVersion.length - 3 > 1 ? 's' : '' }})</span>
+            >(+{{ selectedVersion.length - 3 }} more)</span>
           </template>
           <template v-slot:prepend-item>
             <v-list-item
@@ -461,7 +460,6 @@ export default {
         if (allSelected) {
           this[name] = [];
         } else {
-          console.log(this[source].map(entry => entry.id));
           this[name] = this[source].map(entry => entry.id);
         }
       });
@@ -574,13 +572,11 @@ export default {
 
       const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
         .join(',')}&token=${token}`;
-      console.log(url);
 
       try {
         const { data } = await axios.get(url, {
           responseType: 'blob',
           onDownloadProgress(progress) {
-            console.log(progress);
             this.downloadProgress = progress.loaded / (
               this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0)
             );
@@ -629,7 +625,6 @@ export default {
     ];
     // fill everything
     filters.forEach(([filter, bind]) => {
-      console.log(this[filter]);
       this[bind] = this[filter].map(f => f.id);
     });
 

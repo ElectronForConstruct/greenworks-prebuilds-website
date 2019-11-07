@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
-    drawer: true,
+    drawer: false,
   },
   mutations: {
     SET_USER: (state, user) => {
