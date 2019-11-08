@@ -3,12 +3,23 @@
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
 
-        <v-badge top right overlap class="mr-5 ma-4">
-          <template v-slot:badge>
-            <span>!</span>
-          </template>
-          <v-icon large @click.stop="toggleDrawer">mdi-menu</v-icon>
-        </v-badge>
+      <v-badge top right overlap class="mr-5 ma-4" v-model="showBadge">
+        <template v-slot:badge>
+          <v-tooltip
+            open-on-hover
+            bottom
+          >
+            <template v-slot:activator="{ on }">
+              <span>!</span>
+            </template>
+            <span>
+              <v-icon>mdi-arrow-up</v-icon>
+              Expand side bar to modify search filters
+            </span>
+          </v-tooltip>
+        </template>
+        <v-icon v-ripple large @click.stop="toggleDrawer">mdi-menu</v-icon>
+      </v-badge>
 
         <!-- <v-tooltip
           open-delay="1000000"
@@ -121,18 +132,24 @@ import guest from './assets/githubguest.png';
 export default {
   name: 'App',
   mounted() {
-    console.log(localStorage.getItem('tooltip') === 'true');
+    console.log('tooltip', localStorage.getItem('tooltip') === 'true');
+    console.log('drawer', localStorage.getItem('drawer') === 'true');
     if (localStorage.getItem('tooltip')) {
-      this.showTooltip = localStorage.getItem('tooltip') === 'true';
+      this.showBadge = localStorage.getItem('tooltip') === 'true';
     } else {
-      this.showTooltip = true;
+      this.showBadge = true;
+    }
+
+    if (localStorage.getItem('drawer')) {
+      this.$store.commit('SET_DRAWER', localStorage.getItem('drawer') === 'true');
     }
   },
   methods: {
     toggleDrawer() {
       this.$store.commit('SET_DRAWER', !this.$store.state.drawer);
-      this.showTooltip = false;
+      this.showBadge = false;
       localStorage.setItem('tooltip', 'false');
+      localStorage.setItem('drawer', this.$store.state.drawer);
     },
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
@@ -171,7 +188,7 @@ export default {
   },
   data() {
     return {
-      showTooltip: true,
+      showBadge: false,
       user: {},
       snackbar: false,
       snackbarText: '',
