@@ -6,9 +6,11 @@ module.exports = {
   extends      : [
     'plugin:vue/essential',
     '@vue/airbnb',
+    'plugin:cypress/recommended',
   ],
   plugins      : [
     'vuetify',
+    'cypress',
   ],
   rules        : {
     // 'no-console'                     : process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -20,8 +22,8 @@ module.exports = {
     'vuetify/no-deprecated-classes'  : 'error',
     'vuetify/grid-unknown-attributes': 'error',
     'vuetify/no-legacy-grid'         : 'error',
-    'no-underscore-dangle': 0,
-    'linebreak-style': 0,
+    'no-underscore-dangle'           : 0,
+    'linebreak-style'                : 0,
     // 'vue/return-in-computed-property': 0,
   },
   parserOptions: {
