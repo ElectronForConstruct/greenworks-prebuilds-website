@@ -8,7 +8,9 @@
     "lint": "vue-cli-service lint",
     "build-fct": "netlify-lambda build src_functions",
     "dev": "netlify dev",
-    "serve-fct": "netlify-lambda serve src_functions"
+    "serve-fct": "netlify-lambda serve src_functions",
+    "test:open": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
     "archiver": "^3.0.0",
@@ -40,6 +42,7 @@
     "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "cypress": "^3.6.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.3",
