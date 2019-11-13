@@ -21,3 +21,5 @@ yarn-error.log*
 *.sw?
 
 .env
+
+tests/e2e/videos/
