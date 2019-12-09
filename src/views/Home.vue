@@ -612,7 +612,8 @@ export default {
 
     this.runtime = uniq(allReleases, 'runtime')
       .map(el => ({
-        name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
+        name: toTitleCase(el.runtime.toString())
+          .replace('Nw', 'NW'),
         id: el.runtime.toString(),
         value: true,
       }));
@@ -623,7 +624,7 @@ export default {
       ['runtime', 'selectedRuntime'],
       ['version', 'selectedVersion'],
     ];
-    // fill everything
+      // fill everything
     filters.forEach(([filter, bind]) => {
       this[bind] = this[filter].map(f => f.id);
     });
@@ -644,7 +645,13 @@ export default {
         },
       });
 
-    this.releases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'));
+    const releases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'))
+      .filter(r => !r.prerelease);
+    const prereleases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'))
+      .filter(r => r.prerelease);
+
+    this.releases = releases.concat(prereleases);
+
     this.selectedReleaseTag = this.releases[0];
 
     const { tag } = this.$route.query;
