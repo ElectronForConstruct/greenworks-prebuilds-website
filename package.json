@@ -30,7 +30,7 @@
     "semver": "^6.2.0",
     "streamsaver": "^2.0.3",
     "vue": "^2.6.11",
-    "vue-async-computed": "^3.7.0",
+    "vue-async-computed": "^3.8.1",
     "vue-fragment": "^1.5.1",
     "vue-router": "^3.0.3",
     "vuetify": "^2.1.15",
