@@ -17,7 +17,7 @@
   "dependencies": {
     "archiver": "^3.0.0",
     "axios": "^0.19.1",
-    "core-js": "^3.5.0",
+    "core-js": "^3.6.2",
     "file-saver": "^2.0.2",
     "got": "^9.6.0",
     "jszip": "^3.2.1",
