@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "archiver": "^3.0.0",
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "file-saver": "^2.0.2",
     "got": "^9.6.0",
