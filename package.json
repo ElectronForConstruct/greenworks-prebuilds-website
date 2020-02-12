@@ -49,7 +49,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-cypress": "^2.9.0",
     "eslint-plugin-vue": "^5.0.0",
-    "eslint-plugin-vuetify": "^1.0.0-beta.3",
+    "eslint-plugin-vuetify": "^1.0.0-beta.6",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
     "start-server-and-test": "^1.10.8",
