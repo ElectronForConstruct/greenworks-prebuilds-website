@@ -45,7 +45,7 @@
     "@vue/cli-service": "^4.2.3",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.1.0",
-    "cypress": "^3.8.3",
+    "cypress": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-vue": "^5.0.0",
