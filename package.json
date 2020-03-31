@@ -27,7 +27,7 @@
     "register-service-worker": "^1.7.1",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
-    "semver": "^6.2.0",
+    "semver": "^7.1.3",
     "streamsaver": "^2.0.3",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.8.2",
