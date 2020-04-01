@@ -4,13 +4,13 @@
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
 
       <v-badge top right overlap class="mr-5 ma-4" v-model="showBadge">
-        <template v-slot:badge>
+        <template #badge>
           <v-tooltip
             open-on-hover
             bottom
           >
-            <template v-slot:activator="{ on }">
-              <span>!</span>
+            <template #activator="{ on }">
+              <span v-on="on">!</span>
             </template>
             <span>
               <v-icon>mdi-arrow-up</v-icon>
@@ -18,7 +18,7 @@
             </span>
           </v-tooltip>
         </template>
-        <v-icon v-ripple large @click.stop="toggleDrawer">mdi-menu</v-icon>
+        <v-icon :ripple="false" large @click.stop="toggleDrawer">mdi-menu</v-icon>
       </v-badge>
 
         <!-- <v-tooltip
@@ -28,7 +28,7 @@
           v-model="showTooltip"
           bottom fixed
         >
-          <template v-slot:activator="{ on }">
+          <template #activator="{ on }">
             <v-app-bar-nav-icon v-on="on" @click.stop="toggleDrawer"/>
           </template>
           <span>
@@ -54,7 +54,7 @@
         Github
       </v-btn>
       <v-menu bottom left>
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-avatar v-if="isLogged" size="40" class="ml-5 user-avatar" tile v-on="on">
             <img
               :src="user.avatar_url"
@@ -85,8 +85,18 @@
             </v-list-item-title>
           </v-list-item>
           <v-list-item
+            v-if="isLogged"
+            target="_blank"
+            @click="revoke"
+          >
+            <v-list-item-title>
+              <v-icon left>mdi-account-remove</v-icon>
+              Revoke access
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
             v-else
-            :href="loginUrl()"
+            :href="loginUrl"
           >
             <v-list-item-title>
               <v-icon left>mdi-login</v-icon>
@@ -132,8 +142,6 @@ import guest from './assets/githubguest.png';
 export default {
   name: 'App',
   mounted() {
-    console.log('tooltip', localStorage.getItem('tooltip') === 'true');
-    console.log('drawer', localStorage.getItem('drawer') === 'true');
     if (localStorage.getItem('tooltip')) {
       this.showBadge = localStorage.getItem('tooltip') === 'true';
     } else {
@@ -144,6 +152,22 @@ export default {
       this.$store.commit('SET_DRAWER', localStorage.getItem('drawer') === 'true');
     }
   },
+  computed: {
+    isDev() {
+      return process.env.NODE_ENV === 'development';
+    },
+    clientId() {
+      return this.isDev
+        ? 'e80afe92dc3477294936'
+        : '8af5faeab9599fc013ed';
+    },
+    loginUrl() {
+      return `https://github.com/login/oauth/authorize?client_id=${this.clientId}&allow_signup=true`;
+    },
+    revokeUrl() {
+      return `https://github.com/settings/connections/applications/${this.clientId}`;
+    },
+  },
   methods: {
     toggleDrawer() {
       this.$store.commit('SET_DRAWER', !this.$store.state.drawer);
@@ -151,13 +175,9 @@ export default {
       localStorage.setItem('tooltip', 'false');
       localStorage.setItem('drawer', this.$store.state.drawer);
     },
-    loginUrl() {
-      const isDev = process.env.NODE_ENV === 'development';
-      return `https://github.com/login/oauth/authorize?client_id=${
-        isDev
-          ? 'e80afe92dc3477294936'
-          : '8af5faeab9599fc013ed'
-      }&allow_signup=true`;
+    revoke() {
+      this.disconnect();
+      window.open(this.revokeUrl, '_blank');
     },
     disconnect() {
       localStorage.removeItem('token');
