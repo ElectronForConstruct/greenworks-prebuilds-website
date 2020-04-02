@@ -172,14 +172,10 @@
           <template v-slot:top>
             <v-toolbar flat>
               <v-spacer></v-spacer>
-              <v-btn class="mr-2" @click="shareModal = true">
-                <v-icon left>mdi-share-outline</v-icon>
-                Share URL
-              </v-btn>
               <v-btn
                 :disabled="selectedFiles.length === 0 || loadingDialog === true"
                 @click="dl">
-                <v-icon left>mdi-folder-zip-outline</v-icon>
+                <v-icon left>mdi-folder-download</v-icon>
                 Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
                 {{ selectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
                 : '' }}
@@ -259,13 +255,13 @@
               label="URL"
               type="text"
             ></v-text-field>
-            <v-text-field
+            <!-- <v-text-field
               readonly
               :value="shortenedURL"
               label="Shortened URL"
               type="text"
             >
-            </v-text-field>
+            </v-text-field> -->
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -274,12 +270,12 @@
               @click="copyToClipboard(shortenedURL)">
               Copy short URL
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               v-else
               :loading="generatingURL"
               @click="generateShortURL()">
               Generate short URL
-            </v-btn>
+            </v-btn> -->
             <v-btn @click="copyToClipboard(shareURL())">Copy URL</v-btn>
             <v-btn @click="shareModal = false">OK</v-btn>
           </v-card-actions>
@@ -467,10 +463,12 @@ export default {
     async generateShortURL() {
       this.generatingURL = true;
       try {
-        const { data } = await axios.post('https://link.armaldio.xyz/api', {
-          path: this.shareURL(),
-        });
-        this.shortenedURL = data.path;
+        // const { data } = await axios.post('https://link.armaldio.xyz/api', {
+        //   path: this.shareURL(),
+        // });
+        // const { data } = await axios.get(`https://tinyurl.com/api-create.php?url=${this.shareURL()}`);
+        // console.log(data);
+        // this.shortenedURL = data.path;
         this.generatingURL = false;
       } catch (e) {
         console.error(e);
