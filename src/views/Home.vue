@@ -163,10 +163,14 @@
           <template #top>
             <v-toolbar flat>
               <v-spacer></v-spacer>
-              <v-btn :disabled="selectedFiles.length === 0 || loadingDialog === true" @click="dl">
+              <v-btn
+                :disabled="filteredSelectedFiles.length === 0 || loadingDialog === true"
+                @click="dl"
+              >
                 <v-icon left>mdi-folder-download</v-icon>
-                Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
-                {{ selectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
+                Download {{ filteredSelectedFiles.length }}
+                file{{ filteredSelectedFiles.length > 1 ? 's' : '' }}
+                {{ filteredSelectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
                 : '' }}
               </v-btn>
               <!-- 1049000 bytes to mib -->
@@ -317,10 +321,18 @@ export default {
     selectedRelease() {
       return this.releases.find(r => r === this.selectedReleaseTag);
     },
+    filteredSelectedFiles() {
+      return this.selectedFiles
+        .filter(this.filterOs)
+        .filter(this.filterArch)
+        .filter(this.filterRuntime)
+        .filter(this.filterVersion);
+      // .reverse();
+    },
     calculateTotalSize() {
       return (
         Math.round(
-          (this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0)
+          (this.filteredSelectedFiles.reduce((prev, curr) => prev + curr.size, 0)
             / 1049000)
             * 100,
         ) / 100
@@ -577,7 +589,7 @@ export default {
 
       this.loadingDialog = true;
 
-      const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles
+      const url = `/.netlify/functions/downloadBundle?ids=${this.filteredSelectedFiles
         .map(file => file.id)
         .join(',')}&token=${token}`;
 
@@ -586,7 +598,7 @@ export default {
           responseType: 'blob',
           onDownloadProgress(progress) {
             this.downloadProgress = progress.loaded
-              / this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0);
+              / this.filteredSelectedFiles.reduce((prev, curr) => prev + curr.size, 0);
           },
         });
 
