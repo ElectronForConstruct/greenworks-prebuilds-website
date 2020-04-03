@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+    <portal to="share-btn">
+      <v-btn text class="mr-2 hidden-md-and-down" @click="shareModal = true">
+        <v-icon left>mdi-share-outline</v-icon>Share URL
+      </v-btn>
+    </portal>
     <v-navigation-drawer v-model="$store.state.drawer" clipped fixed app :width="300">
       <v-list dense>
         <v-list-item-content>
@@ -23,18 +28,13 @@
           item-value="id"
           multiple
         >
-          <template v-slot:prepend-item>
-            <v-list-item
-              ripple
-              @click="toggleSelection('selectedOs', 'os')"
-            >
+          <template #prepend-item>
+            <v-list-item ripple @click="toggleSelection('selectedOs', 'os')">
               <v-list-item-action>
-                <v-icon v-if="selectedOs.length === 0">
-                  mdi-checkbox-blank-outline
-                </v-icon>
-                <v-icon v-else>
-                  {{ allChecked('selectedOs', 'os') ? 'mdi-close-box' : 'mdi-minus-box' }}
-                </v-icon>
+                <v-icon v-if="selectedOs.length === 0">mdi-checkbox-blank-outline</v-icon>
+                <v-icon
+                  v-else
+                >{{ allChecked('selectedOs', 'os') ? 'mdi-close-box' : 'mdi-minus-box' }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Select All</v-list-item-title>
@@ -53,17 +53,14 @@
           item-value="id"
           multiple
         >
-          <template v-slot:prepend-item>
-            <v-list-item
-              ripple
-              @click="toggleSelection('selectedArch', 'arch')"
-            >
+          <template #prepend-item>
+            <v-list-item ripple @click="toggleSelection('selectedArch', 'arch')">
               <v-list-item-action>
-                <v-icon v-if="selectedArch.length === 0">
-                  mdi-checkbox-blank-outline
-                </v-icon>
-                <v-icon v-else>
-                  {{ allChecked('selectedArch', 'arch') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                <v-icon v-if="selectedArch.length === 0">mdi-checkbox-blank-outline</v-icon>
+                <v-icon
+                  v-else
+                >
+                {{ allChecked('selectedArch', 'arch') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
@@ -83,17 +80,14 @@
           item-value="id"
           multiple
         >
-          <template v-slot:prepend-item>
-            <v-list-item
-              ripple
-              @click="toggleSelection('selectedRuntime', 'runtime')"
-            >
+          <template #prepend-item>
+            <v-list-item ripple @click="toggleSelection('selectedRuntime', 'runtime')">
               <v-list-item-action>
-                <v-icon v-if="selectedRuntime.length === 0">
-                  mdi-checkbox-blank-outline
-                </v-icon>
-                <v-icon v-else>
-                  {{ allChecked('selectedRuntime', 'runtime') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                <v-icon v-if="selectedRuntime.length === 0">mdi-checkbox-blank-outline</v-icon>
+                <v-icon
+                  v-else
+                >
+                {{ allChecked('selectedRuntime', 'runtime') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
@@ -113,7 +107,7 @@
           item-value="id"
           multiple
         >
-          <template v-slot:selection="{ item, index }">
+          <template #selection="{ item, index }">
             <div v-if="index <= 2" style="white-space: pre;">
               {{ item.name }}
               {{ includeComma(index, selectedVersion.length) ? ', ' : '' }}
@@ -123,17 +117,14 @@
               class="grey--text caption"
             >(+{{ selectedVersion.length - 3 }} more)</span>
           </template>
-          <template v-slot:prepend-item>
-            <v-list-item
-              ripple
-              @click="toggleSelection('selectedVersion', 'version')"
-            >
+          <template #prepend-item>
+            <v-list-item ripple @click="toggleSelection('selectedVersion', 'version')">
               <v-list-item-action>
-                <v-icon v-if="selectedVersion.length === 0">
-                  mdi-checkbox-blank-outline
-                </v-icon>
-                <v-icon v-else>
-                  {{ allChecked('selectedVersion', 'version') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                <v-icon v-if="selectedVersion.length === 0">mdi-checkbox-blank-outline</v-icon>
+                <v-icon
+                  v-else
+                >
+                {{ allChecked('selectedVersion', 'version') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
@@ -169,12 +160,10 @@
           search
           :loading="isLoading"
         >
-          <template v-slot:top>
+          <template #top>
             <v-toolbar flat>
               <v-spacer></v-spacer>
-              <v-btn
-                :disabled="selectedFiles.length === 0 || loadingDialog === true"
-                @click="dl">
+              <v-btn :disabled="selectedFiles.length === 0 || loadingDialog === true" @click="dl">
                 <v-icon left>mdi-folder-download</v-icon>
                 Download {{ selectedFiles.length }} file{{ selectedFiles.length > 1 ? 's' : '' }}
                 {{ selectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
@@ -183,31 +172,41 @@
               <!-- 1049000 bytes to mib -->
             </v-toolbar>
           </template>
-          <template v-slot:item.os="{ item }">
+          <template #item.os="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.os].color" label>
               <v-icon left>{{ iconSet[item.os].icon }}</v-icon>
               {{ iconSet[item.os].name }}
             </v-chip>
           </template>
-          <template v-slot:item.runtime="{ item }">
+          <template #item.runtime="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.runtime].color" label>
               <v-icon left>{{ iconSet[item.runtime].icon }}</v-icon>
               {{ iconSet[item.runtime].name }}
             </v-chip>
           </template>
-          <template v-slot:item.size="{ item }">
+          <template #item.size="{ item }">
             <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
           </template>
-          <template v-slot:item.arch="{ item }">
+          <template #item.arch="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.arch].color" label>
               <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
               {{ iconSet[item.arch].name }}
             </v-chip>
           </template>
-          <template v-slot:item.updated_at="{ item }">
-            {{ new Date(item.updated_at).toLocaleString() }}
+          <template #item.updated_at="{ item }">
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <span
+                    :style="{ cursor: 'pointer'}"
+                    v-on="on"
+                  >
+                    {{ dayjs(item.updated_at).fromNow() }}
+                  </span>
+              </template>
+              <span>{{ dayjs(item.updated_at) }}</span>
+            </v-tooltip>
           </template>
-          <template v-slot:item.range="{ item }">
+          <template #item.abi="{ item }">
             <Range :infos="item"></Range>
           </template>
         </v-data-table>
@@ -232,9 +231,10 @@
           <v-card-title class="headline">Download Info</v-card-title>
           <v-card-text>
             <span>
-              Please <a :href="loginUrl()">login to GitHub</a> to enable file downloading!
+              Please
+              <a :href="loginUrl()">login to GitHub</a> to enable file downloading!
             </span>
-            <br>
+            <br />
             <span>(Required in order to avoid download traffic limits.)</span>
           </v-card-text>
           <v-card-actions>
@@ -249,33 +249,24 @@
           <v-card-title class="headline">URL sharing</v-card-title>
           <v-card-text>
             <p>You can share this URL to link directly to filtered assets</p>
-            <v-text-field
-              readonly
-              :value="shareURL()"
-              label="URL"
-              type="text"
-            ></v-text-field>
+            <v-text-field readonly :value="shareURL()" label="URL" type="text"></v-text-field>
             <!-- <v-text-field
               readonly
               :value="shortenedURL"
               label="Shortened URL"
               type="text"
             >
-            </v-text-field> -->
+            </v-text-field>-->
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              v-if="shortenedURL"
-              @click="copyToClipboard(shortenedURL)">
-              Copy short URL
-            </v-btn>
+            <v-btn v-if="shortenedURL" @click="copyToClipboard(shortenedURL)">Copy short URL</v-btn>
             <!-- <v-btn
               v-else
               :loading="generatingURL"
               @click="generateShortURL()">
               Generate short URL
-            </v-btn> -->
+            </v-btn>-->
             <v-btn @click="copyToClipboard(shareURL())">Copy URL</v-btn>
             <v-btn @click="shareModal = false">OK</v-btn>
           </v-card-actions>
@@ -290,8 +281,12 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import abis from 'modules-abi';
 import semver from 'semver';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import Range from '../components/Range.vue';
+
+dayjs.extend(relativeTime);
 
 // const sleep = m => new Promise(r => setTimeout(r, m));
 
@@ -312,7 +307,10 @@ export default {
   },
   filters: {
     formatName(value) {
-      return value.replace(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/, '$2 $3 $4 $5');
+      return value.replace(
+        /(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/,
+        '$2 $3 $4 $5',
+      );
     },
   },
   computed: {
@@ -320,11 +318,13 @@ export default {
       return this.releases.find(r => r === this.selectedReleaseTag);
     },
     calculateTotalSize() {
-      return Math.round(
-        (
-          this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0) / 1049000
-        ) * 100,
-      ) / 100;
+      return (
+        Math.round(
+          (this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0)
+            / 1049000)
+            * 100,
+        ) / 100
+      );
     },
   },
   data() {
@@ -401,7 +401,7 @@ export default {
         },
         {
           text: 'Version range',
-          value: 'range',
+          value: 'abi',
         },
         {
           text: 'Last update',
@@ -445,7 +445,7 @@ export default {
   },
   methods: {
     includeComma(index, length) {
-      return (index !== length - 1 && index < 2);
+      return index !== length - 1 && index < 2;
     },
     allChecked(name, source) {
       return this[name].length === this[source].length;
@@ -476,6 +476,7 @@ export default {
         this.generatingURL = false;
       }
     },
+    dayjs,
     shareURL() {
       const oses = this.selectedOs;
       const arches = this.selectedArch;
@@ -508,19 +509,19 @@ export default {
       return `${window.location.origin}?${query}`;
     },
     copyToClipboard(text) {
-      navigator.clipboard.writeText(text)
-        .then(() => {
+      navigator.clipboard.writeText(text).then(
+        () => {
           console.log('Async: Copying to clipboard was successful!');
-        }, (err) => {
+        },
+        (err) => {
           console.error('Async: Could not copy text: ', err);
-        });
+        },
+      );
     },
     loginUrl() {
       const isDev = process.env.NODE_ENV === 'development';
       return `https://github.com/login/oauth/authorize?client_id=${
-        isDev
-          ? 'e80afe92dc3477294936'
-          : '8af5faeab9599fc013ed'
+        isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'
       }&allow_signup=true`;
     },
     filteredReleaseAssets() {
@@ -529,7 +530,7 @@ export default {
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
           const asset = this.selectedRelease.assets[i];
           // eslint-disable-next-line
-            assets.push(mapped(asset));
+          assets.push(mapped(asset));
         }
         const ret = assets
           .filter(this.filterOs)
@@ -557,7 +558,9 @@ export default {
     },
     filterVersion(asset) {
       const versions = this.selectedVersion;
-      return versions.length === 0 ? true : versions.includes(asset.abi.replace('v', ''));
+      return versions.length === 0
+        ? true
+        : versions.includes(asset.abi.replace('v', ''));
     },
     async dl() {
       const token = localStorage.getItem('token');
@@ -568,16 +571,16 @@ export default {
 
       this.loadingDialog = true;
 
-      const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles.map(file => file.id)
+      const url = `/.netlify/functions/downloadBundle?ids=${this.selectedFiles
+        .map(file => file.id)
         .join(',')}&token=${token}`;
 
       try {
         const { data } = await axios.get(url, {
           responseType: 'blob',
           onDownloadProgress(progress) {
-            this.downloadProgress = progress.loaded / (
-              this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0)
-            );
+            this.downloadProgress = progress.loaded
+              / this.selectedFiles.reduce((prev, curr) => prev + curr.size, 0);
           },
         });
 
@@ -590,12 +593,11 @@ export default {
     },
   },
   async created() {
-    const uniq = (arr, key) => Array.from(new Set(arr.map(a => a[key])))
+    const uniq = (arr, key) => Array
+      .from(new Set(arr.map(a => a[key])))
       .map(id => arr.find(a => a[key] === id));
 
-    const toTitleCase = s => s.substr(0, 1)
-      .toUpperCase() + s.substr(1)
-      .toLowerCase();
+    const toTitleCase = s => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase();
 
     const _allReleases = await abis.getAll();
     const allReleases = _allReleases.filter(release => release.abi >= 57);
@@ -608,13 +610,11 @@ export default {
         name: `v${el.toString()}`,
       }));
 
-    this.runtime = uniq(allReleases, 'runtime')
-      .map(el => ({
-        name: toTitleCase(el.runtime.toString())
-          .replace('Nw', 'NW'),
-        id: el.runtime.toString(),
-        value: true,
-      }));
+    this.runtime = uniq(allReleases, 'runtime').map(el => ({
+      name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
+      id: el.runtime.toString(),
+      value: true,
+    }));
 
     const filters = [
       ['os', 'selectedOs'],
@@ -622,7 +622,7 @@ export default {
       ['runtime', 'selectedRuntime'],
       ['version', 'selectedVersion'],
     ];
-      // fill everything
+    // fill everything
     filters.forEach(([filter, bind]) => {
       this[bind] = this[filter].map(f => f.id);
     });
@@ -636,16 +636,20 @@ export default {
 
     // ---------------
 
-    const rep = await axios
-      .get('https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases', {
+    const rep = await axios.get(
+      'https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases',
+      {
         headers: {
           Authorization: `token ${'49f5687fc74189014c37fedce2fc2d85dda344f1'}`,
         },
-      });
+      },
+    );
 
-    const releases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'))
+    const releases = rep.data
+      .filter(r => semver.gte(r.tag_name, '0.2.6'))
       .filter(r => !r.prerelease);
-    const prereleases = rep.data.filter(r => semver.gte(r.tag_name, '0.2.6'))
+    const prereleases = rep.data
+      .filter(r => semver.gte(r.tag_name, '0.2.6'))
       .filter(r => r.prerelease);
 
     this.releases = releases.concat(prereleases);
@@ -654,41 +658,43 @@ export default {
 
     const { tag } = this.$route.query;
     if (tag) {
-      this.selectedReleaseTag = this.releases.find(release => release.name === tag);
+      this.selectedReleaseTag = this.releases.find(
+        release => release.name === tag,
+      );
     }
   },
 };
 </script>
 
 <style lang="scss">
-  .full-width {
-    margin-top: 0 !important;
+.full-width {
+  margin-top: 0 !important;
 
-    > div {
-      width: 100% !important;
-    }
+  > div {
+    width: 100% !important;
   }
+}
 
-  th {
-    > i {
-      vertical-align: middle;
-    }
-  }
-
-  .centered-progress {
-    width: 100%;
-    margin: 20px;
-  }
-
-  .sortable i {
-    margin-left: 10px;
-  }
-
-  .sortable span {
+th {
+  > i {
     vertical-align: middle;
   }
+}
 
-  .v-data-footer__icons-after {
-    margin-right: 10px;
-  }
+.centered-progress {
+  width: 100%;
+  margin: 20px;
+}
+
+.sortable i {
+  margin-left: 10px;
+}
+
+.sortable span {
+  vertical-align: middle;
+}
+
+.v-data-footer__icons-after {
+  margin-right: 10px;
+}
 </style>

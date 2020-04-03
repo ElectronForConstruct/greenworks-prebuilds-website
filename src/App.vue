@@ -6,14 +6,19 @@
           <template #badge>
             <v-tooltip open-on-hover bottom>
               <template #activator="{ on }">
-                <span v-on="on">!</span>
+                <div style="min-width: 18px" v-on="on">!</div>
               </template>
               <span>
                 <v-icon>mdi-arrow-up</v-icon>Expand side bar to modify search filters
               </span>
             </v-tooltip>
           </template>
-          <v-icon :ripple="false" :size="26" @click.stop="toggleDrawer">mdi-menu</v-icon>
+          <v-icon
+            :size="26"
+            @click="toggleDrawer"
+          >
+            mdi-menu
+          </v-icon>
         </v-badge>
 
         <!-- <v-tooltip
@@ -34,30 +39,32 @@
 
         <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
         <a class="title" href="/">
-          GREENWORKS PREBUILD - DOWNLOADER
+          <span class="hidden-md-and-down">GREENWORKS PREBUILD - DOWNLOADER</span>
           <v-chip class="ml-4">BETA</v-chip>
         </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text class="mr-2" href="https://armaldio.xyz/donations" target="_blank">
         <v-img width="25" text class="mr-3" :src="icons.donationIcon"></v-img>
-        <span class="d-md-none d-lg-flex">Donations</span>
+        <span class="hidden-md-and-down">Donations</span>
       </v-btn>
-      <v-btn text class="mr-2" @click="shareModal = true">
-        <v-icon left>mdi-share-outline</v-icon>
-        <span class="d-md-none d-lg-flex">Share URL</span>
-      </v-btn>
+      <portal-target name="share-btn" />
       <v-btn
         text
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds-website"
         target="_blank"
       >
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
-        <span class="d-md-none d-lg-flex">Github</span>
+        <span class="hidden-md-and-down">Github</span>
       </v-btn>
-      <v-btn text class="mr-2" target="_blank" href="https://github.com/ElectronForConstruct/greenworks-prebuilds/issues/new/choose">
+      <v-btn
+        text
+        class="mr-2"
+        target="_blank"
+        href="https://github.com/ElectronForConstruct/greenworks-prebuilds/issues/new/choose"
+      >
         <v-icon left>mdi-bug</v-icon>
-        <span class="d-md-none d-lg-flex">Bugs</span>
+        <span class="hidden-md-and-down">Bugs</span>
       </v-btn>
       <v-menu bottom left>
         <template #activator="{ on }">
