@@ -386,26 +386,32 @@ export default {
         {
           text: 'Architecture',
           value: 'arch',
+          width: 100,
         },
         {
           text: 'OS',
           value: 'os',
+          width: 100,
         },
         {
           text: 'Runtime',
           value: 'runtime',
+          width: 100,
         },
         {
           text: 'Size',
           value: 'size',
+          width: 100,
         },
         {
           text: 'Version range',
           value: 'abi',
+          width: 135,
         },
         {
           text: 'Last update',
           value: 'updated_at',
+          width: 150,
         },
       ],
       selectedOs: [],

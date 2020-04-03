@@ -8,17 +8,14 @@
               <template #activator="{ on }">
                 <div style="min-width: 18px" v-on="on">!</div>
               </template>
-              <span>
+              <div>
                 <v-icon>mdi-arrow-up</v-icon>Expand side bar to modify search filters
-              </span>
+              </div>
             </v-tooltip>
           </template>
-          <v-icon
-            :size="26"
-            @click="toggleDrawer"
-          >
-            mdi-menu
-          </v-icon>
+          <div @click="toggleDrawer" style="cursor: pointer">
+            <v-icon :size="26">mdi-menu</v-icon>
+          </div>
         </v-badge>
 
         <!-- <v-tooltip
