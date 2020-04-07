@@ -111,8 +111,6 @@
 <script>
 import ky from 'ky';
 import homeIcon from './assets/home.png';
-import donationIcon from './assets/donation.png';
-import githubIcon from './assets/github.png';
 import guest from './assets/githubguest.png';
 
 export default {
@@ -195,8 +193,6 @@ export default {
       selectedReleaseTag: null,
       icons: {
         homeIcon,
-        donationIcon,
-        githubIcon,
         guest,
       },
     };
