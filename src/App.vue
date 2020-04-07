@@ -42,16 +42,16 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text class="mr-2" href="https://armaldio.xyz/donations" target="_blank">
-        <v-img width="25" text class="mr-3" :src="icons.donationIcon"></v-img>
-        <span class="hidden-md-and-down">Donations</span>
+        <v-icon>mdi-heart</v-icon>
+        <span class="ml-2 hidden-md-and-down">Donations</span>
       </v-btn>
       <v-btn
         text
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds-website"
         target="_blank"
       >
-        <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
-        <span class="hidden-md-and-down">Github</span>
+        <v-icon>mdi-github</v-icon>
+        <span class="ml-2 hidden-md-and-down">Github</span>
       </v-btn>
       <portal-target name="share-btn" />
       <v-btn
@@ -60,8 +60,8 @@
         target="_blank"
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds/issues/new/choose"
       >
-        <v-icon left>mdi-bug</v-icon>
-        <span class="hidden-md-and-down">Bugs</span>
+        <v-icon>mdi-bug</v-icon>
+        <span class="ml-2 hidden-md-and-down">Bugs</span>
       </v-btn>
       <v-menu bottom left>
         <template #activator="{ on }">

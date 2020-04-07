@@ -2,8 +2,8 @@
   <div class="home">
     <portal to="share-btn">
       <v-btn text class="mr-2" @click="shareModal = true">
-        <v-icon left>mdi-share-outline</v-icon>
-        <span class="hidden-md-and-down">Share URL</span>
+        <v-icon>mdi-share-outline</v-icon>
+        <span class="ml-2 hidden-md-and-down">Share URL</span>
       </v-btn>
     </portal>
     <v-navigation-drawer v-model="$store.state.drawer" clipped fixed app :width="300">
