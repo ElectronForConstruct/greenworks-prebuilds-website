@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <portal to="share-btn">
-      <v-btn text class="mr-2 hidden-md-and-down" @click="shareModal = true">
-        <v-icon left>mdi-share-outline</v-icon>Share URL
+      <v-btn text class="mr-2" @click="shareModal = true">
+        <v-icon left>mdi-share-outline</v-icon>
+        <span class="hidden-md-and-down">Share URL</span>
       </v-btn>
     </portal>
     <v-navigation-drawer v-model="$store.state.drawer" clipped fixed app :width="300">
@@ -416,7 +417,7 @@ export default {
           width: 100,
         },
         {
-          text: 'Version range',
+          text: 'Version',
           value: 'abi',
           width: 135,
         },

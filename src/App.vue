@@ -14,7 +14,7 @@
             </v-tooltip>
           </template>
           <div @click="toggleDrawer" style="cursor: pointer">
-            <v-icon :size="26">mdi-menu</v-icon>
+            <v-icon v-ripple :size="26">mdi-menu</v-icon>
           </div>
         </v-badge>
 
@@ -45,7 +45,6 @@
         <v-img width="25" text class="mr-3" :src="icons.donationIcon"></v-img>
         <span class="hidden-md-and-down">Donations</span>
       </v-btn>
-      <portal-target name="share-btn" />
       <v-btn
         text
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds-website"
@@ -54,6 +53,7 @@
         <v-img width="25" text class="mr-3" :src="icons.githubIcon"></v-img>
         <span class="hidden-md-and-down">Github</span>
       </v-btn>
+      <portal-target name="share-btn" />
       <v-btn
         text
         class="mr-2"
