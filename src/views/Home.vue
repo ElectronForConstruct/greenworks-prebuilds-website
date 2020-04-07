@@ -297,12 +297,13 @@ dayjs.extend(relativeTime);
 
 const mapped = (asset) => {
   const arr = asset.name.split(/(.*?)-(.*)-(v.*?)-(.*?)-(.*?)\.node/);
-  return Object.assign({}, asset, {
+  return {
+    ...asset,
     runtime: arr[2],
     abi: arr[3],
     os: arr[4],
     arch: arr[5],
-  });
+  };
 };
 
 export default {
@@ -320,7 +321,7 @@ export default {
   },
   computed: {
     selectedRelease() {
-      return this.releases.find(r => r === this.selectedReleaseTag);
+      return this.releases.find((r) => r === this.selectedReleaseTag);
     },
     filteredSelectedFiles() {
       return this.selectedFiles
@@ -475,7 +476,7 @@ export default {
         if (allSelected) {
           this[name] = [];
         } else {
-          this[name] = this[source].map(entry => entry.id);
+          this[name] = this[source].map((entry) => entry.id);
         }
       });
     },
@@ -522,7 +523,7 @@ export default {
       }
 
       const query = Object.keys(params)
-        .map(k => `${k}=${params[k]}`)
+        .map((k) => `${k}=${params[k]}`)
         .join('&');
 
       return `${window.location.origin}?${query}`;
@@ -591,7 +592,7 @@ export default {
       this.loadingDialog = true;
 
       const url = `/.netlify/functions/downloadBundle?ids=${this.filteredSelectedFiles
-        .map(file => file.id)
+        .map((file) => file.id)
         .join(',')}&token=${token}`;
 
       try {
@@ -613,23 +614,23 @@ export default {
   },
   async created() {
     const uniq = (arr, key) => Array
-      .from(new Set(arr.map(a => a[key])))
-      .map(id => arr.find(a => a[key] === id));
+      .from(new Set(arr.map((a) => a[key])))
+      .map((id) => arr.find((a) => a[key] === id));
 
-    const toTitleCase = s => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase();
+    const toTitleCase = (s) => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase();
 
     const _allReleases = await abis.getAll();
-    const allReleases = _allReleases.filter(release => release.abi >= 57);
+    const allReleases = _allReleases.filter((release) => release.abi >= 57);
 
     this.version = uniq(allReleases, 'abi')
-      .map(el => el.abi)
+      .map((el) => el.abi)
       .sort((a, b) => b - a) // descending, high on top
-      .map(el => ({
+      .map((el) => ({
         id: el.toString(),
         name: `v${el.toString()}`,
       }));
 
-    this.runtime = uniq(allReleases, 'runtime').map(el => ({
+    this.runtime = uniq(allReleases, 'runtime').map((el) => ({
       name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
       id: el.runtime.toString(),
       value: true,
@@ -643,7 +644,7 @@ export default {
     ];
     // fill everything
     filters.forEach(([filter, bind]) => {
-      this[bind] = this[filter].map(f => f.id);
+      this[bind] = this[filter].map((f) => f.id);
     });
 
     // fill only what is in the query
@@ -665,11 +666,11 @@ export default {
     );
 
     const releases = rep.data
-      .filter(r => semver.gte(r.tag_name, '0.2.6'))
-      .filter(r => !r.prerelease);
+      .filter((r) => semver.gte(r.tag_name, '0.2.6'))
+      .filter((r) => !r.prerelease);
     const prereleases = rep.data
-      .filter(r => semver.gte(r.tag_name, '0.2.6'))
-      .filter(r => r.prerelease);
+      .filter((r) => semver.gte(r.tag_name, '0.2.6'))
+      .filter((r) => r.prerelease);
 
     this.releases = releases.concat(prereleases);
 
@@ -678,7 +679,7 @@ export default {
     const { tag } = this.$route.query;
     if (tag) {
       this.selectedReleaseTag = this.releases.find(
-        release => release.name === tag,
+        (release) => release.name === tag,
       );
     }
   },
