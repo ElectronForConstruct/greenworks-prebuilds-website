@@ -1,4 +1,6 @@
 # Greenworks Prebuilds Website
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website?ref=badge_shield)
+
 
 # Usage
 1. Pick a release
@@ -33,3 +35,7 @@ yarn run test
 ```
 yarn run lint
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website?ref=badge_large)
