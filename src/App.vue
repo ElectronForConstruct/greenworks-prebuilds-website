@@ -2,14 +2,14 @@
   <v-app>
     <v-app-bar app fixed clipped-left persistant color="#151515">
       <v-toolbar-title class="headline text-uppercase d-flex align-center">
-        <v-badge top right overlap class="mr-5 ma-4" v-model="showBadge">
+        <v-badge top right overlap class="mr-5 ma-4 badge" v-model="showBadge">
           <template #badge>
-            <v-tooltip open-on-hover bottom>
+            <v-tooltip fixed content-class="badge-tooltip" open-on-hover bottom>
               <template #activator="{ on }">
                 <div style="min-width: 18px" v-on="on">!</div>
               </template>
-              <div>
-                <v-icon>mdi-arrow-up</v-icon>Expand side bar to modify search filters
+              <div class="text-right">
+                <v-icon class="mr-3">mdi-arrow-up</v-icon>Expand side bar to modify search filters
               </div>
             </v-tooltip>
           </template>
@@ -37,11 +37,10 @@
         <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
         <a class="title" href="/">
           <span class="hidden-md-and-down">GREENWORKS PREBUILD - DOWNLOADER</span>
-          <v-chip class="ml-4">BETA</v-chip>
         </a>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text class="mr-2" href="https://armaldio.xyz/donations" target="_blank">
+      <v-btn text class="mr-2" href="https://github.com/sponsors/Armaldio" target="_blank">
         <v-icon>mdi-heart</v-icon>
         <span class="ml-2 hidden-md-and-down">Donations</span>
       </v-btn>
@@ -188,6 +187,7 @@ export default {
       snackbar: false,
       snackbarText: '',
       isLogged: false,
+      t: true,
 
       releases: [],
       selectedReleaseTag: null,
@@ -228,5 +228,14 @@ export default {
   to {
     transform: translatey(3px);
   }
+}
+
+.badge-tooltip {
+  left: 16px !important;
+  top: 45px !important;
+}
+
+.badge {
+  cursor: pointer;
 }
 </style>
