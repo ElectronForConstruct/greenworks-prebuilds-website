@@ -15,8 +15,8 @@ cache:
     - ~/.cache
 
 install:
-  - yarn global add netlify-cli
-  - yarn
+  - npm -g i netlify-cli
+  - npm i
 
 script:
-  - yarn run ci
+  - npm run ci
