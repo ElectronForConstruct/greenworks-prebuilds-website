@@ -22,7 +22,7 @@
     "dayjs": "^1.8.24",
     "file-saver": "^2.0.2",
     "got": "^10.7.0",
-    "jszip": "^3.3.0",
+    "jszip": "^3.4.0",
     "ky": "^0.19.1",
     "modules-abi": "^0.3.4",
     "netlify-lambda": "^1.6.3",
