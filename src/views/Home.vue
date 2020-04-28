@@ -17,7 +17,18 @@
             v-model="selectedReleaseTag"
             item-text="tag_name"
             label="Release Tag"
-          ></v-select>
+          >
+            <template #item="{ item, on }">
+              <v-list-item v-on="item.type === 'tag' ? on : {}">
+                <v-list-item-content disabled v-if="item.type === 'subheader'">
+                  <v-list-item-title class="subheader">{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-content v-if="item.type === 'tag'">
+                  <v-list-item-title>{{ item.tag_name }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-select>
         </v-list-item-content>
 
         <v-select
@@ -201,12 +212,9 @@
           <template #item.updated_at="{ item }">
             <v-tooltip top>
               <template #activator="{ on }">
-                <span
-                    :style="{ cursor: 'pointer'}"
-                    v-on="on"
-                  >
-                    {{ dayjs(item.updated_at).fromNow() }}
-                  </span>
+                <span :style="{ cursor: 'pointer'}" v-on="on">
+                  {{ dayjs(item.updated_at).fromNow() }}
+                </span>
               </template>
               <span>{{ dayjs(item.updated_at) }}</span>
             </v-tooltip>
@@ -285,7 +293,7 @@
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import abis from 'modules-abi';
-import semver from 'semver';
+// import semver from 'semver';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -334,7 +342,10 @@ export default {
     calculateTotalSize() {
       return (
         Math.round(
-          (this.filteredSelectedFiles.reduce((prev, curr) => prev + curr.size, 0)
+          (this.filteredSelectedFiles.reduce(
+            (prev, curr) => prev + curr.size,
+            0,
+          )
             / 1049000)
             * 100,
         ) / 100
@@ -371,7 +382,7 @@ export default {
           color: '#959595',
         },
         win32: {
-          icon: 'mdi-windows',
+          icon: 'mdi-microsoft-windows',
           name: 'Windows',
           color: '#0078d7',
         },
@@ -545,6 +556,7 @@ export default {
       }&allow_signup=true`;
     },
     filteredReleaseAssets() {
+      console.log('this.selectedRelease', this.selectedRelease);
       if (this.selectedRelease) {
         const assets = [];
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
@@ -600,7 +612,10 @@ export default {
           responseType: 'blob',
           onDownloadProgress(progress) {
             this.downloadProgress = progress.loaded
-              / this.filteredSelectedFiles.reduce((prev, curr) => prev + curr.size, 0);
+              / this.filteredSelectedFiles.reduce(
+                (prev, curr) => prev + curr.size,
+                0,
+              );
           },
         });
 
@@ -613,9 +628,9 @@ export default {
     },
   },
   async created() {
-    const uniq = (arr, key) => Array
-      .from(new Set(arr.map((a) => a[key])))
-      .map((id) => arr.find((a) => a[key] === id));
+    const uniq = (arr, key) => Array.from(
+      new Set(arr.map((a) => a[key])),
+    ).map((id) => arr.find((a) => a[key] === id));
 
     const toTitleCase = (s) => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase();
 
@@ -666,15 +681,36 @@ export default {
     );
 
     const releases = rep.data
-      .filter((r) => semver.gte(r.tag_name, '0.2.6'))
+      // .filter((r) => semver.gte(r.tag_name, '0.2.6'))
       .filter((r) => !r.prerelease);
+    releases.forEach((r) => {
+      // eslint-disable-next-line no-param-reassign
+      r.type = 'tag';
+    });
+
     const prereleases = rep.data
-      .filter((r) => semver.gte(r.tag_name, '0.2.6'))
+      // .filter((r) => semver.gte(r.tag_name, '0.2.6'))
       .filter((r) => r.prerelease);
+    prereleases.forEach((r) => {
+      // eslint-disable-next-line no-param-reassign
+      r.type = 'tag';
+    });
 
-    this.releases = releases.concat(prereleases);
+    const subheader = (label) => ({
+      type: 'subheader',
+      text: label,
+    });
 
-    this.selectedReleaseTag = this.releases[0];
+    this.releases = [
+      subheader('Releases'),
+      ...releases,
+      subheader('Pre-releases'),
+      ...prereleases,
+    ];
+
+    console.log('this.releases', this.releases);
+
+    this.selectedReleaseTag = this.releases[1];
 
     const { tag } = this.$route.query;
     if (tag) {
@@ -716,5 +752,10 @@ th {
 
 .v-data-footer__icons-after {
   margin-right: 10px;
+}
+
+.subheader {
+  color: grey;
+  font-size: 14px;
 }
 </style>
