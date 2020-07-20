@@ -23,7 +23,7 @@
     "file-saver": "^2.0.2",
     "got": "^11.1.3",
     "jszip": "^3.4.0",
-    "ky": "^0.19.1",
+    "ky": "^0.22.0",
     "modules-abi": "^0.3.4",
     "netlify-lambda": "^1.6.3",
     "portal-vue": "^2.1.7",
