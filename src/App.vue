@@ -95,11 +95,11 @@
       </v-menu>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <v-container>
         <router-view />
       </v-container>
-    </v-content>
+    </v-main>
     <v-snackbar v-model="snackbar" color="blue" bottom right :timeout="30000">
       {{ snackbarText }}
       <v-btn text @click="snackbar = false">Close</v-btn>

@@ -188,28 +188,28 @@
               <!-- 1049000 bytes to mib -->
             </v-toolbar>
           </template>
-          <template #item.os="{ item }">
+          <template #[`item.os`]="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.os].color" label>
               <v-icon left>{{ iconSet[item.os].icon }}</v-icon>
               {{ iconSet[item.os].name }}
             </v-chip>
           </template>
-          <template #item.runtime="{ item }">
+          <template #[`item.runtime`]="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.runtime].color" label>
               <v-icon left>{{ iconSet[item.runtime].icon }}</v-icon>
               {{ iconSet[item.runtime].name }}
             </v-chip>
           </template>
-          <template #item.size="{ item }">
+          <template #[`item.size`]="{ item }">
             <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
           </template>
-          <template #item.arch="{ item }">
+          <template #[`item.arch`]="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.arch].color" label>
               <v-icon left>{{ iconSet[item.arch].icon }}</v-icon>
               {{ iconSet[item.arch].name }}
             </v-chip>
           </template>
-          <template #item.updated_at="{ item }">
+          <template #[`item.updated_at`]="{ item }">
             <v-tooltip top>
               <template #activator="{ on }">
                 <span :style="{ cursor: 'pointer'}" v-on="on">
@@ -219,7 +219,7 @@
               <span>{{ dayjs(item.updated_at) }}</span>
             </v-tooltip>
           </template>
-          <template #item.abi="{ item }">
+          <template #[`item.abi`]="{ item }">
             <Range :infos="item"></Range>
           </template>
         </v-data-table>
