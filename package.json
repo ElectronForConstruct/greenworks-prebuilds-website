@@ -43,7 +43,7 @@
     "@mdi/font": "^5.8.55",
     "@types/archiver": "^3.1.1",
     "@types/core-js": "^2.5.4",
-    "@types/eslint": "^7.2.4",
+    "@types/eslint": "^7.2.5",
     "@types/file-saver": "^2.0.1",
     "@types/request": "^2.48.5",
     "@types/request-promise-native": "^1.0.17",
