@@ -16,7 +16,7 @@
     "test:open": "cypress open"
   },
   "dependencies": {
-    "archiver": "^5.0.2",
+    "archiver": "^5.1.0",
     "axios": "^0.21.0",
     "core-js": "^3.7.0",
     "dayjs": "^1.9.6",
