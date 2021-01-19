@@ -600,7 +600,7 @@ export default {
       const versions = this.selectedVersion;
       return versions.length === 0
         ? true
-        : versions.includes(asset.abi.replace('v', ''));
+        : versions.includes(asset.abi);
     },
     async dl() {
       const token = localStorage.getItem('token');
@@ -645,38 +645,6 @@ export default {
     const _allReleases = await abis.getAll();
     const allReleases = _allReleases.filter((release) => release.abi >= 57);
 
-    this.version = uniq(allReleases, 'abi')
-      .map((el) => el.abi)
-      .sort((a, b) => b - a) // descending, high on top
-      .map((el) => ({
-        id: el.toString(),
-        name: `v${el.toString()}`,
-      }));
-
-    this.runtime = uniq(allReleases, 'runtime').map((el) => ({
-      name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
-      id: el.runtime.toString(),
-      value: true,
-    }));
-
-    const filters = [
-      ['os', 'selectedOs'],
-      ['arch', 'selectedArch'],
-      ['runtime', 'selectedRuntime'],
-      ['version', 'selectedVersion'],
-    ];
-    // fill everything
-    filters.forEach(([filter, bind]) => {
-      this[bind] = this[filter].map((f) => f.id);
-    });
-
-    // fill only what is in the query
-    filters.forEach(([filter, bind]) => {
-      if (this.$route.query[filter]) {
-        this[bind] = this.$route.query[filter].split(',');
-      }
-    });
-
     // ---------------
 
     const rep = await axios.get(
@@ -713,6 +681,46 @@ export default {
     ];
 
     this.selectedReleaseTag = this.releases[1];
+
+    /* this.version = uniq(allReleases, 'abi')
+      .map((el) => el.abi)
+      .sort((a, b) => b - a) // descending, high on top
+      .map((el) => ({
+        id: el.toString(),
+        name: `v${el.toString()}`,
+      })); */
+    this.version = [...new Set(this.filteredReleaseAssets().map((asset) => asset.abi))]
+      .sort() // descending, high on top
+      .reverse()
+      .map((version) => ({
+        id: version,
+        name: version,
+      }));
+    console.log('this.version', this.version);
+
+    this.runtime = uniq(allReleases, 'runtime').map((el) => ({
+      name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),
+      id: el.runtime.toString(),
+      value: true,
+    }));
+
+    const filters = [
+      ['os', 'selectedOs'],
+      ['arch', 'selectedArch'],
+      ['runtime', 'selectedRuntime'],
+      ['version', 'selectedVersion'],
+    ];
+    // fill everything
+    filters.forEach(([filter, bind]) => {
+      this[bind] = this[filter].map((f) => { console.log('f', f); return f.id; });
+    });
+
+    // fill only what is in the query
+    filters.forEach(([filter, bind]) => {
+      if (this.$route.query[filter]) {
+        this[bind] = this.$route.query[filter].split(',');
+      }
+    });
 
     const { tag } = this.$route.query;
     if (tag) {
