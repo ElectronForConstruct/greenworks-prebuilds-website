@@ -220,6 +220,9 @@
             </v-tooltip>
           </template>
           <template #[`item.abi`]="{ item }">
+            <span>{{ item.abi }}</span>
+          </template>
+          <template #[`item.range`]="{ item }">
             <Range :infos="item"></Range>
           </template>
         </v-data-table>
@@ -429,7 +432,12 @@ export default {
           width: 100,
         },
         {
-          text: 'Version',
+          text: 'Version range',
+          value: 'range',
+          width: 200,
+        },
+        {
+          text: 'ABI',
           value: 'abi',
           width: 135,
         },

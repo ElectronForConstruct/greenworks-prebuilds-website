@@ -1,16 +1,9 @@
 <template>
-  <v-tooltip top>
-    <template #activator="{ on }">
-      <v-chip v-on="on" label color="blue">
-        <span>{{ infos.abi }}</span>
-      </v-chip>
-    </template>
-    <span>
-      {{ range[0] ? range[0] : '' }}
-      <v-icon small>mdi-arrow-right</v-icon>
-      {{ range[1] ? range[1] : '' }}
-    </span>
-  </v-tooltip>
+  <span>
+    {{ range[0] ? range[0] : '' }}
+    <v-icon small>mdi-arrow-right</v-icon>
+    {{ range[1] ? range[1] : '' }}
+  </span>
 </template>
 
 <script>
