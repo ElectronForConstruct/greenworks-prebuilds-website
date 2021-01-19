@@ -147,6 +147,10 @@
           </template>
         </v-select>
       </v-list>
+
+      <div class="text-center">
+        <v-btn @click="resetFilters">Clear filters</v-btn>
+      </div>
     </v-navigation-drawer>
 
     <v-row>
@@ -484,6 +488,25 @@ export default {
     };
   },
   methods: {
+    resetFilters() {
+      const filters = [
+        ['os', 'selectedOs'],
+        ['arch', 'selectedArch'],
+        ['runtime', 'selectedRuntime'],
+        ['version', 'selectedVersion'],
+      ];
+      // fill everything
+      filters.forEach(([filter, bind]) => {
+        this[bind] = this[filter].map((f) => f.id);
+      });
+
+      // fill only what is in the query
+      filters.forEach(([filter, bind]) => {
+        if (this.$route.query[filter]) {
+          this[bind] = this.$route.query[filter].split(',');
+        }
+      });
+    },
     includeComma(index, length) {
       return index !== length - 1 && index < 2;
     },
@@ -704,23 +727,7 @@ export default {
       value: true,
     }));
 
-    const filters = [
-      ['os', 'selectedOs'],
-      ['arch', 'selectedArch'],
-      ['runtime', 'selectedRuntime'],
-      ['version', 'selectedVersion'],
-    ];
-    // fill everything
-    filters.forEach(([filter, bind]) => {
-      this[bind] = this[filter].map((f) => { console.log('f', f); return f.id; });
-    });
-
-    // fill only what is in the query
-    filters.forEach(([filter, bind]) => {
-      if (this.$route.query[filter]) {
-        this[bind] = this.$route.query[filter].split(',');
-      }
-    });
+    this.resetFilters();
 
     const { tag } = this.$route.query;
     if (tag) {
