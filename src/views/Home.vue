@@ -15,7 +15,7 @@
             class="mx-3"
             :items="releases"
             v-model="selectedReleaseTag"
-            item-text="tag_name"
+            item-text="name"
             label="Release Tag"
           >
             <template #item="{ item, on }">
@@ -24,7 +24,7 @@
                   <v-list-item-title class="subheader">{{ item.text }}</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-content v-if="item.type === 'tag'">
-                  <v-list-item-title>{{ item.tag_name }}</v-list-item-title>
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
@@ -332,6 +332,7 @@ export default {
   },
   computed: {
     selectedRelease() {
+      console.log('this.releases', this.releases);
       return this.releases.find((r) => r === this.selectedReleaseTag);
     },
     filteredSelectedFiles() {
@@ -564,7 +565,6 @@ export default {
       }&allow_signup=true`;
     },
     filteredReleaseAssets() {
-      console.log('this.selectedRelease', this.selectedRelease);
       if (this.selectedRelease) {
         const assets = [];
         for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
@@ -688,17 +688,13 @@ export default {
       },
     );
 
-    const releases = rep.data
-      // .filter((r) => semver.gte(r.tag_name, '0.2.6'))
-      .filter((r) => !r.prerelease);
+    const releases = rep.data.filter((r) => !r.prerelease);
     releases.forEach((r) => {
       // eslint-disable-next-line no-param-reassign
       r.type = 'tag';
     });
 
-    const prereleases = rep.data
-      // .filter((r) => semver.gte(r.tag_name, '0.2.6'))
-      .filter((r) => r.prerelease);
+    const prereleases = rep.data.filter((r) => r.prerelease);
     prereleases.forEach((r) => {
       // eslint-disable-next-line no-param-reassign
       r.type = 'tag';
@@ -715,8 +711,6 @@ export default {
       subheader('Pre-releases'),
       ...prereleases,
     ];
-
-    console.log('this.releases', this.releases);
 
     this.selectedReleaseTag = this.releases[1];
 
