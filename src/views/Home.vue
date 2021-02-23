@@ -674,7 +674,7 @@ export default {
       'https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases',
       {
         headers: {
-          Authorization: `token ${'49f5687fc74189014c37fedce2fc2d85dda344f1'}`,
+          Accept: 'application/vnd.github.v3+json',
         },
       },
     );
