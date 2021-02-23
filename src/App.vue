@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app fixed clipped-left persistant color="#151515">
-      <v-toolbar-title class="headline text-uppercase d-flex align-center">
+      <v-toolbar-title class="text-h5 text-uppercase d-flex align-center">
         <v-badge top right overlap class="mr-5 ma-4 badge" v-model="showBadge">
           <template #badge>
             <v-tooltip fixed content-class="badge-tooltip" open-on-hover bottom>
@@ -35,7 +35,7 @@
         </v-tooltip>-->
 
         <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
-        <a class="title" href="/">
+        <a class="text-h6" href="/">
           <span class="hidden-md-and-down">GREENWORKS PREBUILD - DOWNLOADER</span>
         </a>
       </v-toolbar-title>
@@ -201,7 +201,7 @@ export default {
 </script>
 
 <style lang="scss">
-.title {
+.text-h6 {
   color: white !important;
   text-decoration: none;
 }

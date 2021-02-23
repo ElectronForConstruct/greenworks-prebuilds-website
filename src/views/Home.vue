@@ -126,7 +126,7 @@
             </div>
             <span
               v-if="index === 3"
-              class="grey--text caption"
+              class="grey--text text-caption"
             >(+{{ selectedVersion.length - 3 }} more)</span>
           </template>
           <template #prepend-item>
@@ -248,7 +248,7 @@
 
       <v-dialog v-model="showLoginModal" width="500" persistent>
         <v-card>
-          <v-card-title class="headline">Download Info</v-card-title>
+          <v-card-title class="text-h5">Download Info</v-card-title>
           <v-card-text>
             <span>
               Please
@@ -266,7 +266,7 @@
 
       <v-dialog v-model="shareModal" width="500" persistent>
         <v-card>
-          <v-card-title class="headline">URL sharing</v-card-title>
+          <v-card-title class="text-h5">URL sharing</v-card-title>
           <v-card-text>
             <p>You can share this URL to link directly to filtered assets</p>
             <v-text-field readonly :value="shareURL()" label="URL" type="text"></v-text-field>
