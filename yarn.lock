@@ -1503,12 +1503,12 @@
     thread-loader "^2.1.3"
     webpack "^4.0.0"
 
-"@vue/cli-plugin-e2e-cypress@~4.5.10":
-  version "4.5.10"
-  resolved "https://registry.npm.taobao.org/@vue/cli-plugin-e2e-cypress/download/@vue/cli-plugin-e2e-cypress-4.5.10.tgz#69bf718e61bee65bbfc5ab4c40033b9e206f0685"
-  integrity sha1-ab9xjmG+5lu/xatMQAM7niBvBoU=
+"@vue/cli-plugin-e2e-cypress@~4.5.11":
+  version "4.5.11"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-e2e-cypress/-/cli-plugin-e2e-cypress-4.5.11.tgz#4fb86caf10b942425cb41ba2a1355a2be75e43cb"
+  integrity sha512-0SjUlNpjXHyZRdBMrOSsSuWDIi4DyRVmJhkkBLUpGHJt1SSyWOY70NRfemhef2yJZVWyFA4GjN9Mn6xYAH6z/w==
   dependencies:
-    "@vue/cli-shared-utils" "^4.5.10"
+    "@vue/cli-shared-utils" "^4.5.11"
     cypress "^3.8.3"
     eslint-plugin-cypress "^2.10.3"
 
