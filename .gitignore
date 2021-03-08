@@ -23,3 +23,5 @@ yarn-error.log*
 .env
 
 tests/e2e/videos/
+
+functions/
