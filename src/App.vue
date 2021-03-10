@@ -132,14 +132,11 @@ export default {
     isDev() {
       return process.env.NODE_ENV === 'development';
     },
-    clientId() {
-      return this.isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed';
-    },
     loginUrl() {
-      return `https://github.com/login/oauth/authorize?client_id=${this.clientId}&allow_signup=true`;
+      return `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_GH_CLIENT_ID}&allow_signup=true`;
     },
     revokeUrl() {
-      return `https://github.com/settings/connections/applications/${this.clientId}`;
+      return `https://github.com/settings/connections/applications/${process.env.VUE_APP_GH_CLIENT_ID}`;
     },
   },
   methods: {

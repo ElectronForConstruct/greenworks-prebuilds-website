@@ -12,8 +12,8 @@ exports.handler = async function (event) {
     url: 'https://github.com/login/oauth/access_token',
     method: 'POST',
     json: {
-      client_id: /* isDev ? process.env.GH_CLIENT_ID_DEV :  */process.env.GH_CLIENT_ID,
-      client_secret: /* isDev ? process.env.GH_CLIENT_SECRET_DEV :  */process.env.GH_CLIENT_SECRET,
+      client_id: process.env.VUE_APP_GH_CLIENT_ID,
+      client_secret: process.env.VUE_APP_GH_CLIENT_SECRET,
       code,
     },
   });

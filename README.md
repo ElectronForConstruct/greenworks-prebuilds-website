@@ -14,7 +14,9 @@ Files based on [greenworks-prebuilds](https://github.com/ElectronForConstruct/gr
 ## Project setup
 ```
 npm install
+cp .env/example .env
 ```
+Then fill the `.env` file with your keys
 
 ### Compiles and hot-reloads for development
 ```

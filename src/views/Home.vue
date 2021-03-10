@@ -582,10 +582,7 @@ export default {
       );
     },
     loginUrl() {
-      const isDev = process.env.NODE_ENV === 'development';
-      return `https://github.com/login/oauth/authorize?client_id=${
-        isDev ? 'e80afe92dc3477294936' : '8af5faeab9599fc013ed'
-      }&allow_signup=true`;
+      return `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_GH_CLIENT_ID}&allow_signup=true`;
     },
     filteredReleaseAssets() {
       if (this.selectedRelease) {
