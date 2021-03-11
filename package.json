@@ -8,7 +8,7 @@
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "ci": "start-server-and-test dev http://localhost:8888 test",
-    "dev": "netlify dev",
+    "dev": "netlify dev --functions src/lambda",
     "test:open": "cypress open"
   },
   "dependencies": {

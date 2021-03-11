@@ -1,6 +1,5 @@
 [build]
-  functions = "lambda"
-  functionsSource = "src/lambda"
+  functions = "src/lambda"
 
 # [[redirects]]
 #   from = "/*"
