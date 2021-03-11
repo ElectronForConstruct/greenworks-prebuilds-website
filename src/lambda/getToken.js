@@ -1,7 +1,5 @@
-import request from 'request';
-import util from 'util';
-
-// const isDev = process.env.NODE_ENV === 'production';
+const request = require('request');
+const util = require('util');
 
 const rq = util.promisify(request);
 

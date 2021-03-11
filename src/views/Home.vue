@@ -336,7 +336,6 @@ export default {
   },
   computed: {
     selectedRelease() {
-      console.log('this.releases', this.releases);
       return this.releases.find((r) => r === this.selectedReleaseTag);
     },
     filteredSelectedFiles() {
@@ -638,13 +637,13 @@ export default {
       try {
         const { data } = await axios.get(url, {
           responseType: 'blob',
-          onDownloadProgress(progress) {
+          /* onDownloadProgress(progress) {
             this.downloadProgress = progress.loaded
               / this.filteredSelectedFiles.reduce(
                 (prev, curr) => prev + curr.size,
                 0,
               );
-          },
+          }, */
         });
 
         saveAs(data, 'greenworks-binaries.zip');
@@ -716,7 +715,6 @@ export default {
         id: version,
         name: version,
       }));
-    console.log('this.version', this.version);
 
     this.runtime = uniq(allReleases, 'runtime').map((el) => ({
       name: toTitleCase(el.runtime.toString()).replace('Nw', 'NW'),

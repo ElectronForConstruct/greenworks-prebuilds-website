@@ -39,11 +39,9 @@ export default {
   },
   async mounted() {
     this.code = this.$route.query.code;
-    console.log(this.code);
     const resp = await ky
       .get(`/.netlify/functions/getToken?code=${this.code}`)
       .json();
-    console.log(resp);
     if (resp.access_token) {
       localStorage.setItem('token', resp.access_token);
       this.isOk = true;

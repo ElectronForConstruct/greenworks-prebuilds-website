@@ -1,6 +1,6 @@
-import request from 'request';
-import JSZIP from 'jszip';
-import util from 'util';
+const request = require('request');
+const JSZIP = require('jszip');
+const util = require('util');
 
 const zip = new JSZIP();
 const dl = util.promisify(request);
@@ -26,8 +26,6 @@ const downloadFromId = async (id, token) => {
       'User-Agent': 'Greenworks Prebuilds Downloader',
     },
   });
-
-  console.log(`File ${id}`);
 
   return {
     content: stream.body,
