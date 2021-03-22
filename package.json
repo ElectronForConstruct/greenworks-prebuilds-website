@@ -59,7 +59,7 @@
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
     "sass": "^1.32.8",
     "sass-loader": "^8.0.2",
-    "start-server-and-test": "^1.12.0",
+    "start-server-and-test": "^1.12.1",
     "stylus": "^0.54.8",
     "stylus-loader": "^4.3.3",
     "vue-cli-plugin-vuetify": "~2.0.9",
