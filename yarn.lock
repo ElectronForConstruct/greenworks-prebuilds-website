@@ -1310,10 +1310,10 @@
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
-"@types/stylus@^0.48.33":
-  version "0.48.33"
-  resolved "https://registry.yarnpkg.com/@types/stylus/-/stylus-0.48.33.tgz#5dde23178bc3eddf1522fe85340942803e4a7fd0"
-  integrity sha512-2uxz/OykfCkFOewBMw55GYVW9MGGgvmOvMR0bnLKD6HybK1QFspJlEwrHG9L5NDImoGRCbCfGFqlcoczfcf+RA==
+"@types/stylus@^0.48.34":
+  version "0.48.34"
+  resolved "https://registry.yarnpkg.com/@types/stylus/-/stylus-0.48.34.tgz#ead6e231e113563d9757e20a08aa41f41196cdc2"
+  integrity sha512-fwNpRybWTcJ3g+UobfYCfzsqJ7aGAo4w9QQdVhDnoVqtYaYtfG5aWohlvck5fC4SP+F32pIduBcHU/9yevTMRA==
   dependencies:
     "@types/node" "*"
 
