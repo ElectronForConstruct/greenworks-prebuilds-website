@@ -1,0 +1,35 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: cypress
+    versions:
+    - 6.3.0
+    - 7.0.1
+  - dependency-name: ky
+    versions:
+    - 0.27.0
+  - dependency-name: sass-loader
+    versions:
+    - 10.1.1
+    - 11.0.0
+    - 11.0.1
+  - dependency-name: stylus-loader
+    versions:
+    - 5.0.0
+  - dependency-name: vue-cli-plugin-vuetify
+    versions:
+    - 2.1.0
+    - 2.2.0
+    - 2.2.2
+    - 2.3.1
+  - dependency-name: sass
+    versions:
+    - 1.32.5
+  - dependency-name: dayjs
+    versions:
+    - 1.10.4
