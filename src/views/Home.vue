@@ -299,7 +299,7 @@
 <script>
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import abis from 'modules-abi';
+import ABIs from 'modules-abi';
 // import semver from 'semver';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -307,6 +307,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Range from '../components/Range.vue';
 
 dayjs.extend(relativeTime);
+
+const abis = new ABIs();
 
 // const sleep = m => new Promise(r => setTimeout(r, m));
 
