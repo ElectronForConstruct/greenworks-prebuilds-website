@@ -43,7 +43,7 @@
     "@types/request": "^2.48.5",
     "@types/request-promise-native": "^1.0.17",
     "@types/sass": "^1.16.0",
-    "@types/semver": "^7.3.4",
+    "@types/semver": "^7.3.8",
     "@types/stylus": "^0.48.34",
     "@vue/cli-plugin-babel": "~4.5.12",
     "@vue/cli-plugin-e2e-cypress": "~4.5.12",
