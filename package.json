@@ -47,7 +47,7 @@
     "@types/stylus": "^0.48.34",
     "@vue/cli-plugin-babel": "~4.5.12",
     "@vue/cli-plugin-e2e-cypress": "~4.5.12",
-    "@vue/cli-plugin-eslint": "~4.5.12",
+    "@vue/cli-plugin-eslint": "~4.5.14",
     "@vue/cli-plugin-pwa": "~4.5.12",
     "@vue/cli-service": "~4.5.12",
     "@vue/eslint-config-airbnb": "^5.3.0",
