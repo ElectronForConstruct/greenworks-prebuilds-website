@@ -45,7 +45,7 @@
     "@types/sass": "^1.16.0",
     "@types/semver": "^7.3.4",
     "@types/stylus": "^0.48.34",
-    "@vue/cli-plugin-babel": "~4.5.12",
+    "@vue/cli-plugin-babel": "~5.0.3",
     "@vue/cli-plugin-e2e-cypress": "~4.5.12",
     "@vue/cli-plugin-eslint": "~4.5.12",
     "@vue/cli-plugin-pwa": "~4.5.12",
