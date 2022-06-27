@@ -19,7 +19,7 @@
     "file-saver": "^2.0.5",
     "got": "^11.8.2",
     "jszip": "^3.6.0",
-    "ky": "^0.27.0",
+    "ky": "^0.31.0",
     "modules-abi": "^0.3.4",
     "portal-vue": "^2.1.7",
     "register-service-worker": "^1.7.2",
