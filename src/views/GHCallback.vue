@@ -4,8 +4,7 @@
       <v-progress-circular
         indeterminate
         color="primary"
-      >
-      </v-progress-circular>
+      />
     </div>
     <div v-else>
       <div v-if="isOk" class="isOk">

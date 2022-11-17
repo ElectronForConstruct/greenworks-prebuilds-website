@@ -20,6 +20,7 @@ export default {
   props: {
     infos: {
       type: Object,
+      required: true,
     },
   },
   async created() {

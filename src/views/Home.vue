@@ -56,7 +56,7 @@
                 <v-list-item-title>Select All</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider class="mt-2"></v-divider>
+            <v-divider class="mt-2" />
           </template>
         </v-select>
 
@@ -78,14 +78,14 @@
                 <v-icon
                   v-else
                 >
-                {{ allChecked('selectedArch', 'arch') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                  {{ allChecked('selectedArch', 'arch') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Select All</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider class="mt-2"></v-divider>
+            <v-divider class="mt-2" />
           </template>
         </v-select>
 
@@ -107,14 +107,14 @@
                 <v-icon
                   v-else
                 >
-                {{ allChecked('selectedRuntime', 'runtime') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                  {{ allChecked('selectedRuntime', 'runtime') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Select All</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider class="mt-2"></v-divider>
+            <v-divider class="mt-2" />
           </template>
         </v-select>
 
@@ -146,14 +146,14 @@
                 <v-icon
                   v-else
                 >
-                {{ allChecked('selectedVersion', 'version') ? 'mdi-close-box' : 'mdi-minus-box' }}
+                  {{ allChecked('selectedVersion', 'version') ? 'mdi-close-box' : 'mdi-minus-box' }}
                 </v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>Select All</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider class="mt-2"></v-divider>
+            <v-divider class="mt-2" />
           </template>
         </v-select>
       </v-list>
@@ -188,7 +188,7 @@
         >
           <template #top>
             <v-toolbar flat>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn
                 :disabled="filteredSelectedFiles.length === 0 || loadingDialog === true"
                 @click="dl"
@@ -197,7 +197,7 @@
                 Download {{ filteredSelectedFiles.length }}
                 file{{ filteredSelectedFiles.length > 1 ? 's' : '' }}
                 {{ filteredSelectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
-                : '' }}
+                  : '' }}
               </v-btn>
               <!-- 1049000 bytes to mib -->
             </v-toolbar>
@@ -215,7 +215,7 @@
             </v-chip>
           </template>
           <template #[`item.size`]="{ item }">
-            <v-chip class="ma-1" label>{{ Math.round(item.size/1049000*100)/100 }} MB</v-chip>
+            <v-chip class="ma-1" label>{{ Math.round(item.size / 1049000 * 100) / 100 }} MB</v-chip>
           </template>
           <template #[`item.arch`]="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.arch].color" label>
@@ -226,7 +226,7 @@
           <template #[`item.updated_at`]="{ item }">
             <v-tooltip top>
               <template #activator="{ on }">
-                <span :style="{ cursor: 'pointer'}" v-on="on">
+                <span :style="{ cursor: 'pointer' }" v-on="on">
                   {{ dayjs(item.updated_at).fromNow() }}
                 </span>
               </template>
@@ -237,7 +237,7 @@
             <span>{{ item.abi }}</span>
           </template>
           <template #[`item.range`]="{ item }">
-            <Range :infos="item"></Range>
+            <Range :infos="item" />
           </template>
         </v-data-table>
       </v-col>
@@ -251,7 +251,7 @@
               :value="downloadProgress"
               color="white"
               class="mb-0"
-            ></v-progress-linear>
+            />
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -268,7 +268,7 @@
             <span>(Required in order to avoid download traffic limits.)</span>
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn @click="showLoginModal = false">OK</v-btn>
           </v-card-actions>
         </v-card>
@@ -279,7 +279,7 @@
           <v-card-title class="text-h5">URL sharing</v-card-title>
           <v-card-text>
             <p>You can share this URL to link directly to filtered assets</p>
-            <v-text-field readonly :value="shareURL()" label="URL" type="text"></v-text-field>
+            <v-text-field readonly :value="shareURL()" label="URL" type="text" />
             <!-- <v-text-field
               readonly
               :value="shortenedURL"
@@ -289,7 +289,7 @@
             </v-text-field>-->
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn v-if="shortenedURL" @click="copyToClipboard(shortenedURL)">Copy short URL</v-btn>
             <!-- <v-btn
               v-else

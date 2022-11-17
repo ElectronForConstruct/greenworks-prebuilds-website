@@ -34,13 +34,13 @@
           </span>
         </v-tooltip>-->
 
-        <v-img class="mx-3" width="45" :src="icons.homeIcon"></v-img>
+        <v-img class="mx-3" width="45" :src="icons.homeIcon" />
         <a class="text-h6" href="/">
           <span class="hidden-md-and-down">GREENWORKS PREBUILD - DOWNLOADER</span>
         </a>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn text class="mr-2" href="https://github.com/sponsors/Armaldio" target="_blank">
+      <v-spacer />
+      <v-btn text class="mr-2" href="https://github.com/sponsors/Armaldio" rel="noopener noreferrer" target="_blank">
         <v-icon>mdi-heart</v-icon>
         <span class="ml-2 hidden-md-and-down">Donations</span>
       </v-btn>
@@ -48,6 +48,7 @@
         text
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds-website"
         target="_blank"
+        rel="noopener noreferrer"
       >
         <v-icon>mdi-github</v-icon>
         <span class="ml-2 hidden-md-and-down">Github</span>
@@ -57,6 +58,7 @@
         text
         class="mr-2"
         target="_blank"
+        rel="noopener noreferrer"
         href="https://github.com/ElectronForConstruct/greenworks-prebuilds/issues/new/choose"
       >
         <v-icon>mdi-bug</v-icon>
@@ -68,7 +70,7 @@
             <img :src="user.avatar_url" :alt="user.login" />
           </v-avatar>
           <v-avatar v-else size="40" class="ml-5 user-avatar" tile v-on="on">
-            <v-img :src="icons.guest"></v-img>
+            <v-img :src="icons.guest" />
           </v-avatar>
         </template>
 
