@@ -45,7 +45,7 @@ specifiers:
   streamsaver: ^2.0.6
   stylus: ^0.59.0
   stylus-loader: ^7.1.0
-  vue: ^2.6.12
+  vue: 2.7.14
   vue-async-computed: ^3.9.0
   vue-cli-plugin-vuetify: ~2.5.8
   vue-fragment: ^1.6.0
