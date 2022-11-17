@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import abis from 'modules-abi';
+import { getRange } from 'modules-abi';
 
 export default {
   name: 'Range',
@@ -27,7 +27,7 @@ export default {
     const abi = parseInt(this.infos.abi.replace('v', ''), 10);
 
     try {
-      this.range = await abis.getRange(abi, rt, {
+      this.range = await getRange(abi, rt, {
         includeNightly: true,
         includeBeta: true,
         includeReleaseCandidates: true,

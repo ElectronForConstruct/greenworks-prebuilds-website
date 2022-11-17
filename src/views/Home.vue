@@ -17,6 +17,8 @@
             v-model="selectedReleaseTag"
             item-text="name"
             label="Release Tag"
+            outlined
+            dense
           >
             <template #item="{ item, on }">
               <v-list-item v-on="item.type === 'tag' ? on : {}">
@@ -39,6 +41,8 @@
           item-text="name"
           item-value="id"
           multiple
+          outlined
+          dense
         >
           <template #prepend-item>
             <v-list-item ripple @click="toggleSelection('selectedOs', 'os')">
@@ -64,6 +68,8 @@
           item-text="name"
           item-value="id"
           multiple
+          outlined
+          dense
         >
           <template #prepend-item>
             <v-list-item ripple @click="toggleSelection('selectedArch', 'arch')">
@@ -91,6 +97,8 @@
           item-text="name"
           item-value="id"
           multiple
+          outlined
+          dense
         >
           <template #prepend-item>
             <v-list-item ripple @click="toggleSelection('selectedRuntime', 'runtime')">
@@ -118,6 +126,8 @@
           item-text="name"
           item-value="id"
           multiple
+          outlined
+          dense
         >
           <template #selection="{ item, index }">
             <div v-if="index <= 2" style="white-space: pre;">
@@ -299,7 +309,7 @@
 <script>
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import abis from 'modules-abi';
+import { getAll } from 'modules-abi';
 // import semver from 'semver';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -661,7 +671,7 @@ export default {
 
     const toTitleCase = (s) => s.substr(0, 1).toUpperCase() + s.substr(1).toLowerCase();
 
-    const _allReleases = await abis.getAll();
+    const _allReleases = await getAll();
     const allReleases = _allReleases.filter((release) => release.abi >= 57);
 
     // ---------------
@@ -708,8 +718,9 @@ export default {
         id: el.toString(),
         name: `v${el.toString()}`,
       })); */
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
     this.version = [...new Set(this.filteredReleaseAssets().map((asset) => asset.abi))]
-      .sort() // descending, high on top
+      .sort(collator.compare) // descending, high on top
       .reverse()
       .map((version) => ({
         id: version,

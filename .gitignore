@@ -25,3 +25,6 @@ yarn-error.log*
 tests/e2e/videos/
 
 functions/
+
+# Local Netlify folder
+.netlify
