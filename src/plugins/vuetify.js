@@ -1,7 +1,25 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import * as components from 'vuetify/lib';
+import Vuetify from 'vuetify/lib/framework';
 
-Vue.use(Vuetify);
+const {
+  ClickOutside, Intersect, Mutate, Resize, Ripple, Scroll, Touch, colors, ...rest
+} = components;
+
+Vue.use(Vuetify, {
+  components: {
+    ...rest,
+  },
+  directives: {
+    ClickOutside,
+    Intersect,
+    Mutate,
+    Resize,
+    Ripple,
+    Scroll,
+    Touch,
+  },
+});
 
 export default new Vuetify({
   icons: {

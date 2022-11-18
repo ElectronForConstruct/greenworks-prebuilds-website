@@ -5,3 +5,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[dev]
+framework = "vite"
+command = "pnpm serve"

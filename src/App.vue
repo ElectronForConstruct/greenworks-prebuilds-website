@@ -132,13 +132,13 @@ export default {
   },
   computed: {
     isDev() {
-      return process.env.NODE_ENV === 'development';
+      return import.meta.env.NODE_ENV === 'development';
     },
     loginUrl() {
-      return `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_GH_CLIENT_ID}&allow_signup=true`;
+      return `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_APP_GH_CLIENT_ID}&allow_signup=true`;
     },
     revokeUrl() {
-      return `https://github.com/settings/connections/applications/${process.env.VUE_APP_GH_CLIENT_ID}`;
+      return `https://github.com/settings/connections/applications/${import.meta.env.VITE_APP_GH_CLIENT_ID}`;
     },
   },
   methods: {
