@@ -331,6 +331,8 @@ const mapped = (asset) => {
   };
 };
 
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
 export default {
   name: 'home',
   components: {
@@ -606,6 +608,10 @@ export default {
           .filter(this.filterArch)
           .filter(this.filterRuntime)
           .filter(this.filterVersion)
+          .sort((a, b) => {
+            console.log('a', a);
+            return collator.compare(a.abi, b.abi);
+          })
           .reverse();
         this.isLoading = false;
         return ret;
@@ -718,7 +724,6 @@ export default {
         id: el.toString(),
         name: `v${el.toString()}`,
       })); */
-    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
     this.version = [...new Set(this.filteredReleaseAssets().map((asset) => asset.abi))]
       .sort(collator.compare) // descending, high on top
       .reverse()
