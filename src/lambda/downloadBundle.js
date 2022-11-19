@@ -1,14 +1,11 @@
-const request = require('request');
 const JSZIP = require('jszip');
-const util = require('util');
 
 const zip = new JSZIP();
-const dl = util.promisify(request);
 
 const downloadFromId = async (id, token) => {
   const url = `https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases/assets/${id}`;
 
-  const infos = await dl({
+  const infosRAW = await fetch({
     url,
     headers: {
       Authorization: `token ${token}`,
@@ -17,7 +14,9 @@ const downloadFromId = async (id, token) => {
     json: true,
   });
 
-  const stream = await dl({
+  const infos = await infosRAW.json();
+
+  const stream = await fetch({
     url,
     encoding: null,
     headers: {

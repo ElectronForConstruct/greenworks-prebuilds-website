@@ -1,12 +1,7 @@
-const request = require('request');
-const util = require('util');
-
-const rq = util.promisify(request);
-
 exports.handler = async function (event) {
   const { code } = event.queryStringParameters;
 
-  const data = await rq({
+  const dataRAW = await fetch({
     url: 'https://github.com/login/oauth/access_token',
     method: 'POST',
     json: {
@@ -15,6 +10,8 @@ exports.handler = async function (event) {
       code,
     },
   });
+
+  const data = await dataRAW.json();
 
   return {
     headers: {
