@@ -13,31 +13,20 @@ Files based on [greenworks-prebuilds](https://github.com/ElectronForConstruct/gr
 # Contribution
 ## Project setup
 ```
-npm install
+pnpm install
 cp .env/example .env
 ```
 Then fill the `.env` file with your keys
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+pnpm run dev
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+pnpm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FElectronForConstruct%2Fgreenworks-prebuilds-website?ref=badge_large)

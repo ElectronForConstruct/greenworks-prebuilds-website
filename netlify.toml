@@ -9,3 +9,6 @@
 [dev]
 framework = "vite"
 command = "pnpm serve"
+
+[functions]
+  node_bundler = "esbuild"

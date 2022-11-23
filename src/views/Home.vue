@@ -541,7 +541,6 @@ export default {
         //   path: this.shareURL(),
         // });
         // const { data } = await axios.get(`https://tinyurl.com/api-create.php?url=${this.shareURL()}`);
-        // console.log(data);
         // this.shortenedURL = data.path;
         this.generatingURL = false;
       } catch (e) {
@@ -608,10 +607,7 @@ export default {
           .filter(this.filterArch)
           .filter(this.filterRuntime)
           .filter(this.filterVersion)
-          .sort((a, b) => {
-            console.log('a', a);
-            return collator.compare(a.abi, b.abi);
-          })
+          .sort((a, b) => collator.compare(a.abi, b.abi))
           .reverse();
         this.isLoading = false;
         return ret;
@@ -665,7 +661,7 @@ export default {
         saveAs(data, 'greenworks-binaries.zip');
         this.loadingDialog = false;
       } catch (e) {
-        console.log('Error downloading bundle', e);
+        console.error('Error downloading bundle', e);
         this.loadingDialog = false;
       }
     },

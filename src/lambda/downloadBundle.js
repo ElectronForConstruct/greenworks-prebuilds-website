@@ -1,34 +1,35 @@
-const JSZIP = require('jszip');
+import JSZIP from 'jszip';
+import fetch from 'node-fetch';
 
 const zip = new JSZIP();
 
 const downloadFromId = async (id, token) => {
   const url = `https://api.github.com/repos/ElectronForConstruct/greenworks-prebuilds/releases/assets/${id}`;
 
-  const infosRAW = await fetch({
-    url,
-    headers: {
-      Authorization: `token ${token}`,
-      'User-Agent': 'Greenworks Prebuilds Downloader',
-    },
-    json: true,
+  const headers = new Headers();
+  headers.append('Authorization', `token ${token}`);
+  headers.append('User-Agent', 'Greenworks Prebuilds Downloader');
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  const infosRAW = await fetch(url, {
+    headers,
   });
 
   const infos = await infosRAW.json();
 
-  const stream = await fetch({
-    url,
-    encoding: null,
-    headers: {
-      Accept: 'application/octet-stream',
-      Authorization: `token ${token}`,
-      'User-Agent': 'Greenworks Prebuilds Downloader',
-    },
+  const headers2 = new Headers();
+  headers2.append('Authorization', `token ${token}`);
+  headers2.append('Accept', 'application/octet-stream');
+  headers2.append('User-Agent', 'Greenworks Prebuilds Downloader');
+  headers2.append('Content-Type', 'application/json');
+
+  const stream = await fetch(url, {
+    headers: headers2,
   });
 
   return {
     content: stream.body,
-    name: infos.body.name,
+    name: infos.name,
   };
 };
 
@@ -40,7 +41,7 @@ const assoc = {
   ia32: '32',
 };
 
-exports.handler = async function (event) {
+const handler = async (event) => {
   const { ids: _ids, token } = event.queryStringParameters;
 
   if (!_ids || _ids.length === 0) {
@@ -55,26 +56,20 @@ exports.handler = async function (event) {
   const pDownloads = [];
 
   for (let i = 0; i < ids.length; i += 1) {
-    pDownloads.push(downloadFromId(ids[i], token));
+    pDownloads.push(() => downloadFromId(ids[i], token));
   }
-  const files = await Promise.all(pDownloads);
+  const files = await Promise.all(pDownloads.map((x) => x()));
   files.forEach((file) => {
     const { name } = file;
     const regFile = /(.*)-(.*)-(.*)-(.*)-(.*)\.node/.exec(name);
-    console.log(regFile);
     const [, , runtime, abi, os, arch] = regFile;
-    console.log(`Adding ${name} (${runtime}, ${abi}, ${os}, ${arch})`);
     zip.file(`${runtime}/${abi}/greenworks-${assoc[os]}${assoc[arch]}.node`, file.content);
   });
-
-  console.log('All files prepared');
 
   const body = await zip.generateAsync({
     type: 'base64',
     compression: 'DEFLATE',
   });
-
-  console.log('Returning');
 
   return {
     headers: {
@@ -93,3 +88,6 @@ exports.handler = async function (event) {
   //   body: 'Error preparing files',
   // };
 };
+
+// eslint-disable-next-line import/prefer-default-export
+export { handler };
