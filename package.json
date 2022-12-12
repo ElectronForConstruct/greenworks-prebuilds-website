@@ -22,7 +22,7 @@
     "ky": "^0.32.2",
     "modules-abi": "^1.1.0",
     "node-fetch": "^3.3.0",
-    "portal-vue": "^2.1.7",
+    "portal-vue": "^3.0.0",
     "register-service-worker": "^1.7.2",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
