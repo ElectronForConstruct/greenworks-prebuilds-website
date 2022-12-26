@@ -62,7 +62,7 @@
     "eslint-plugin-vue": "^9.7.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
     "netlify-cli": "^12.2.6",
-    "sass": "~1.32.6",
+    "sass": "~1.57.1",
     "sass-loader": "10",
     "start-server-and-test": "^1.14.0",
     "stylus": "^0.59.0",
