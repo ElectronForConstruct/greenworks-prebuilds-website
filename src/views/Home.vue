@@ -179,29 +179,12 @@
         <v-data-table
           v-model="selectedFiles"
           :headers="headers"
-          :items="filteredReleaseAssets()"
+          :items="filteredReleaseAssets"
           item-key="name"
-          show-select
           class="elevation-1"
           search
           :loading="isLoading"
         >
-          <template #top>
-            <v-toolbar flat>
-              <v-spacer />
-              <v-btn
-                :disabled="filteredSelectedFiles.length === 0 || loadingDialog === true"
-                @click="dl"
-              >
-                <v-icon left>mdi-folder-download</v-icon>
-                Download {{ filteredSelectedFiles.length }}
-                file{{ filteredSelectedFiles.length > 1 ? 's' : '' }}
-                {{ filteredSelectedFiles.length > 0 ? `(${calculateTotalSize}MB)`
-                  : '' }}
-              </v-btn>
-              <!-- 1049000 bytes to mib -->
-            </v-toolbar>
-          </template>
           <template #[`item.os`]="{ item }">
             <v-chip class="ma-1" :color="iconSet[item.os].color" label>
               <v-icon left>{{ iconSet[item.os].icon }}</v-icon>
@@ -238,6 +221,11 @@
           </template>
           <template #[`item.range`]="{ item }">
             <Range :infos="item" />
+          </template>
+          <template #[`item.actions`]="{ item }">
+            <v-btn :download="item.name" :href="item.browser_download_url" small icon>
+              <v-icon>mdi-download-box</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </v-col>
@@ -347,6 +335,25 @@ export default {
     },
   },
   computed: {
+    filteredReleaseAssets() {
+      if (this.selectedRelease) {
+        const assets = [];
+        for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
+          const asset = this.selectedRelease.assets[i];
+          // eslint-disable-next-line
+          assets.push(mapped(asset));
+        }
+        const ret = assets
+          .filter(this.filterOs)
+          .filter(this.filterArch)
+          .filter(this.filterRuntime)
+          .filter(this.filterVersion)
+          .sort((a, b) => collator.compare(a.abi, b.abi))
+          .reverse();
+        return ret;
+      }
+      return [];
+    },
     selectedRelease() {
       return this.releases.find((r) => r === this.selectedReleaseTag);
     },
@@ -460,6 +467,11 @@ export default {
         {
           text: 'Last update',
           value: 'updated_at',
+          width: 150,
+        },
+        {
+          text: 'Actions',
+          value: 'actions',
           width: 150,
         },
       ],
@@ -594,27 +606,6 @@ export default {
     loginUrl() {
       return `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_APP_GH_CLIENT_ID}&allow_signup=true`;
     },
-    filteredReleaseAssets() {
-      if (this.selectedRelease) {
-        const assets = [];
-        for (let i = 0; i < this.selectedRelease.assets.length; i += 1) {
-          const asset = this.selectedRelease.assets[i];
-          // eslint-disable-next-line
-          assets.push(mapped(asset));
-        }
-        const ret = assets
-          .filter(this.filterOs)
-          .filter(this.filterArch)
-          .filter(this.filterRuntime)
-          .filter(this.filterVersion)
-          .sort((a, b) => collator.compare(a.abi, b.abi))
-          .reverse();
-        this.isLoading = false;
-        return ret;
-      }
-      this.isLoading = false;
-      return [];
-    },
     filterArch(asset) {
       const arches = this.selectedArch;
       return arches.length === 0 ? true : arches.includes(asset.arch);
@@ -720,7 +711,7 @@ export default {
         id: el.toString(),
         name: `v${el.toString()}`,
       })); */
-    this.version = [...new Set(this.filteredReleaseAssets().map((asset) => asset.abi))]
+    this.version = [...new Set(this.filteredReleaseAssets.map((asset) => asset.abi))]
       .sort(collator.compare) // descending, high on top
       .reverse()
       .map((version) => ({
@@ -742,6 +733,8 @@ export default {
         (release) => release.name === tag,
       );
     }
+
+    this.isLoading = false;
   },
 };
 </script>
