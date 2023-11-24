@@ -591,7 +591,7 @@ export default {
         .map((k) => `${k}=${params[k]}`)
         .join('&');
 
-      return `${window.location.origin}?${query}`;
+      return encodeURI(`${window.location.origin}?${query}`);
     },
     copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(
