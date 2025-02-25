@@ -176,6 +176,10 @@
 
       <!-- Here -->
       <v-col cols="12">
+        <v-alert dismissible type="error">
+          Greenworks automated prebuilds are deprecated—switch to <a href="https://pipelab.app?utm_source=greenworks-prebuilds&utm_medium=banner&utm_campaign=move-to-pipelab">Pipelab</a>'s native <a href="https://docs.pipelab.app/guide/integrations/steam.html">Steam integration</a> for seamless exports. Pipelab automates game packaging, uploads, and publishing, simplifying your workflow.
+        </v-alert>
+
         <v-data-table
           v-model="selectedFiles"
           :headers="headers"
